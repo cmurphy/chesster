@@ -69,7 +69,7 @@ int main()
   for (int i = 0; i < vsize; ++i) {
     black_rook_moves[i].print();
   }
-*/
+
 
   vector<Move> white_knight_moves = board.move_list(3, 0);
   vsize = white_knight_moves.size();
@@ -77,7 +77,8 @@ int main()
   for (int i = 0; i < vsize; ++i) {
     white_knight_moves[i].print();
   }
-
+*/
+  // Generate black knight moves
   vector<Move> black_knight_moves = board.move_list(1, 5);
   vsize = black_knight_moves.size();
   cout << "Black knight's moves: \n";
@@ -85,9 +86,13 @@ int main()
     black_knight_moves[i].print();
   }
 
+  // Move the black knight
+  State newboard = board.make_move(black_knight_moves[0]);
+  newboard.print_state();
+
   return 0;
 }
-
+/*
 bool is_color(char piece, bool color)
 {
   if (piece >= 'B' && piece <= 'Q') {
@@ -107,7 +112,7 @@ bool is_empty(char piece)
 {
   return piece == '.';
 }
-
+*/
 vector<Move> add_vector(vector<Move> oldv, vector<Move> newv)
 {
   int vsize = newv.size();

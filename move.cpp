@@ -24,3 +24,8 @@ Square Move::get_to_square()
 {
   return to_Square;
 }
+
+Square Move::get_from_square()
+{
+  return from_Square;
+}

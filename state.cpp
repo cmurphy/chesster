@@ -1,14 +1,3 @@
-/*
-    The state class represents the minichess board. 
-    Members: 
-      - a two-dimentional array to represent the 5x6 area board
-      - boolean who's move
-      - number of moves played (max 40)
-    Methods:
-      - print the current state of the board
-      - read the current board from a stream
-      - create a starting board
-*/
 #include "header.h"
 
 State::State()
@@ -106,6 +95,11 @@ bool State::piece_is_capturable(int x, int y, bool color)
   } else {
     return piece_is_white(x, y);
   }
+}
+
+bool State::move_start_is_valid(int x0, int y0)
+{
+  return (board[y0][x0] != '.' && piece_is_color(x0, y0, move));
 }
 
 vector<Move> State::move_gen(int x0, int y0, int dx, int dy, bool stop_short = false, bool capture = true)
@@ -248,4 +242,31 @@ vector<Move> State::move_list(int x, int y)
       cout << "fail" << endl;
   } 
   return moves;
+}
+
+State State::make_move(Move newmove)
+{
+  Square from = newmove.get_from_square();
+  Square to = newmove.get_to_square();
+  int fromx = from.x;
+  int fromy = from.y;
+  int tox = to.x;
+  int toy = to.y;
+  State newstate;
+  try {
+    if (move_start_is_valid(fromx, fromy)) {
+      newstate.read_state(this->board);
+      char piece = newstate.board[fromy][fromx];
+      newstate.board[fromy][fromx] = '.';
+      newstate.board[toy][tox] = piece;
+      newstate.move = !move;
+      newstate.num_moves = num_moves + 1;
+    } else {
+      int e = 1;
+      throw e;
+    }
+  } catch (int e) {
+    cout << "Not a valid move.\n";
+  }
+  return newstate;
 }

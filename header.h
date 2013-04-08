@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <vector>
 using namespace std;
 
@@ -32,6 +33,7 @@ class Move
     Move(int x0, int y0, int xn, int yn);
     void print();
     Square get_to_square();
+    Square get_from_square();
 };
 
 vector<Move> add_vector(vector<Move> moves, vector<Move> tempmoves);
@@ -53,7 +55,10 @@ class State
     bool piece_is_black(int x, int y);
     bool piece_is_color(int x, int y, bool color);
     bool piece_is_capturable(int x, int y, bool color);
+    bool move_start_is_valid(int x0, int y0);
     vector<Move> move_gen(int x0, int y0, int dx, int dy, bool stop_short, bool capture);
     vector<Move> move_list(int x0, int y0);
+    State make_move(Move move);
+    State human_move(string move);
 };
 
