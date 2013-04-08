@@ -34,8 +34,6 @@ void State::create_board()
       board[i][j] = '.';
     }
   }
-  // testing
-  board[1][0] = '.';
   // white pawns
   for (int i = 0; i < 5; ++i) { board[4][i] = 'P'; }
   // white piaces
@@ -71,21 +69,53 @@ void State::read_state(char newboard[BOARD_SIZE_X][BOARD_SIZE_Y])
   }
 }
 
-vector<Move> State::move_gen(int x0, int y0, int dx, int dy, bool stop_short, bool capture)
+bool State::square_is_empty(int x, int y)
+{
+  return board[y][x] == '.';
+}
+
+bool State::piece_is_white(int x, int y)
+{
+  return board[y][x] >= 'B' && board[y][x] <= 'Q';
+}
+
+bool State::piece_is_black(int x, int y)
+{
+  return board[y][x] >= 'b' && board[y][x] <= 'q';
+}
+
+bool State::piece_is_color(int x, int y, bool color)
+{
+  if (color == white) {
+    return piece_is_white(x, y);
+  } else {
+    return piece_is_black(x, y);
+  }
+} 
+
+bool State::piece_is_capturable(int x, int y, bool color)
+{
+  if(color == white) {
+    return piece_is_black(x, y);
+  } else {
+    return piece_is_white(x, y);
+  }
+}
+
+vector<Move> State::move_gen(int x0, int y0, int dx, int dy, bool stop_short = false, bool capture = true)
 {
   int x = x0;
   int y = y0;
   bool color = move;
   vector<Move> moves;
   do {
-    cout << "in move gen" << endl;
     x += dx;
     y += dy;
     if (x < 0 || x > BOARD_SIZE_X || y < 0 || y > BOARD_SIZE_Y) {
       break;
     }
-    if (!is_empty(board[x][y])) {
-      if (is_color(board[x][y], color)) {
+    if (!square_is_empty(x, y)) {
+      if (!piece_is_color(x, y, color)) {
         break;
       }
       if (!capture) {
@@ -101,16 +131,19 @@ vector<Move> State::move_gen(int x0, int y0, int dx, int dy, bool stop_short, bo
 
 vector<Move> State::move_list(int x, int y)
 {
-  char piece = board[x][y];
-  vector<Move> moves;
+  char piece = board[y][x];
+  vector<Move> moves, tempmoves;
   int dx = -1;
   int dy = -1;
   bool stop_short = false;
+  bool capture = true;
   switch (piece) {
+    // king or queen
     case 'q':
     case 'k':
     case 'Q':
     case 'K':
+    {
       while (dx <= 1) {
         while (dy <= 1) {
           if (dx == 0 && dy == 0) {
@@ -118,7 +151,7 @@ vector<Move> State::move_list(int x, int y)
             continue;
           }
           stop_short = (piece == 'k' || piece == 'K');
-          vector<Move> tempmoves = move_gen(x, y, dx, dy, stop_short, true);
+          tempmoves = move_gen(x, y, dx, dy, stop_short);
           int vsize = tempmoves.size();
           for (int i = 0; i < vsize; ++i) {
             moves.push_back(tempmoves[i]);
@@ -128,9 +161,32 @@ vector<Move> State::move_list(int x, int y)
         ++dx;
         dy = -1;
       }
-      return moves;
       break;
+    }
+    // pawn
+    case 'p':
+    case 'P':
+    {
+      int dir = 1;
+      if (piece == 'P') {
+        dir = -dir;
+      }
+      stop_short = true;
+      tempmoves = move_gen(x, y, -1, dir, stop_short);
+      if (tempmoves.size() == 1 && piece_is_capturable(tempmoves[0].get_to_square().x, tempmoves[0].get_to_square().y, (piece == 'P'))) {
+        moves = add_vector(moves, tempmoves);
+      }
+      tempmoves = move_gen(x, y, 1, dir, stop_short);
+      if (tempmoves.size() == 1 && piece_is_capturable(tempmoves[0].get_to_square().x, tempmoves[0].get_to_square().y, (piece == 'P'))) {
+        moves = add_vector(moves, tempmoves);
+      }
+      capture = false;
+      tempmoves = move_gen(x, y, 0, dir, stop_short, capture);
+      moves = add_vector(moves, tempmoves);
+      break;
+    }
     default:
       cout << "fail" << endl;
   } 
+  return moves;
 }

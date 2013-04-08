@@ -19,3 +19,8 @@ void Move::print()
   to_Square.print();
   cout << endl;
 }
+
+Square Move::get_to_square()
+{
+  return to_Square;
+}
