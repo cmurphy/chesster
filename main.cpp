@@ -41,7 +41,7 @@ int main()
   for (int i = 0; i < vsize; ++i) {
     white_pawn_moves[i].print();
   }
-*/
+
   vector<Move> white_bishop_moves = board.move_list(2, 5);
   vsize = white_bishop_moves.size();
   cout << "White bishops' moves: \n";
@@ -69,7 +69,22 @@ int main()
   for (int i = 0; i < vsize; ++i) {
     black_rook_moves[i].print();
   }
-  
+*/
+
+  vector<Move> white_knight_moves = board.move_list(3, 0);
+  vsize = white_knight_moves.size();
+  cout << "White knight's moves: \n";
+  for (int i = 0; i < vsize; ++i) {
+    white_knight_moves[i].print();
+  }
+
+  vector<Move> black_knight_moves = board.move_list(1, 5);
+  vsize = black_knight_moves.size();
+  cout << "Black knight's moves: \n";
+  for (int i = 0; i < vsize; ++i) {
+    black_knight_moves[i].print();
+  }
+
   return 0;
 }
 
@@ -100,4 +115,11 @@ vector<Move> add_vector(vector<Move> oldv, vector<Move> newv)
     oldv.push_back(newv[i]);
   }
   return oldv;
+}
+
+void swap(int & x, int & y)
+{
+  int tmp = x;
+  x = y;
+  y = tmp;
 }

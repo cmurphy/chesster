@@ -10,6 +10,7 @@ const int BOARD_SIZE_Y = 6;
 
 //bool is_color(char piece, bool color);
 //bool is_empty(char piece);
+void swap(int & x, int & y);
 
 class Square
 {

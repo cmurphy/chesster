@@ -27,19 +27,21 @@ void State::create_board()
   board[0][3] = 'n';
   board[0][4] = 'r';
   // black pawns
-//  for (int i = 0; i < 5; ++i) { board[1][i] = 'p'; }
+  for (int i = 0; i < 5; ++i) { board[1][i] = 'p'; }
   // blanks
 // testing
-  for (int i = 0; i < 5; ++i) { board[1][i] = '.'; }
+
+//  for (int i = 0; i < 5; ++i) { board[1][i] = '.'; }
   for (int i = 2; i < 4; ++i) {
     for (int j = 0; j < 5; ++j) {
       board[i][j] = '.';
     }
   }
-  // white pawns
-//  for (int i = 0; i < 5; ++i) { board[4][i] = 'P'; }
+
+ // white pawns
+  for (int i = 0; i < 5; ++i) { board[4][i] = 'P'; }
   // testing
-  for (int i = 0; i < 5; ++i) { board[4][i] = '.'; }
+//  for (int i = 0; i < 5; ++i) { board[4][i] = '.'; }
   // white pieces
   board[5][0] = 'R';
   board[5][1] = 'N';
@@ -196,6 +198,27 @@ vector<Move> State::move_list(int x, int y)
           dy = tmp;
           dy = -dy;
         }
+      }
+      break;
+    }
+    /***************** knight ******************/
+    case 'n':
+    case 'N':
+    {
+      dx = 1;
+      dy = 2;
+      stop_short = true;
+      for (int i = 1; i <= 4; ++i) {
+        moves = add_vector(moves, move_gen(x, y, dx, dy, stop_short));
+        swap(dx, dy);
+        dy = -dy;
+      }
+      dx = -1;
+      dy = 2;
+      for (int i = 1; i <= 4; ++i) {
+        moves = add_vector(moves, move_gen(x, y, dx, dy, stop_short));
+        swap(dx, dy);
+        dy = -dy;
       }
       break;
     }
