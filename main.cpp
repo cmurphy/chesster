@@ -6,9 +6,10 @@ int main()
   board.print_state();
   int x0 = 0, y0 = 0, dx = 1, dy = 1;
   bool stop_short = false, capture = true;
-
+  int vsize;
+/*
   vector<Move> black_king_moves = board.move_list(x0, y0);
-  int vsize = black_king_moves.size();
+  vsize = black_king_moves.size();
   cout << "Black king's moves: \n";
   for (int i = 0; i < vsize; ++i) {
     black_king_moves[i].print();
@@ -39,6 +40,34 @@ int main()
   cout << "White pawns' moves: \n";
   for (int i = 0; i < vsize; ++i) {
     white_pawn_moves[i].print();
+  }
+*/
+  vector<Move> white_bishop_moves = board.move_list(2, 5);
+  vsize = white_bishop_moves.size();
+  cout << "White bishops' moves: \n";
+  for (int i = 0; i < vsize; ++i) {
+    white_bishop_moves[i].print();
+  }
+
+  vector<Move> black_bishop_moves = board.move_list(2, 0);
+  vsize = black_bishop_moves.size();
+  cout << "Black bishops' moves: \n";
+  for (int i = 0; i < vsize; ++i) {
+    black_bishop_moves[i].print();
+  }
+
+  vector<Move> white_rook_moves = board.move_list(0, 5);
+  vsize = white_rook_moves.size();
+  cout << "White rooks' moves: \n";
+  for (int i = 0; i < vsize; ++i) {
+    white_rook_moves[i].print();
+  }
+
+  vector<Move> black_rook_moves = board.move_list(4, 0);
+  vsize = black_rook_moves.size();
+  cout << "Black rooks' moves: \n";
+  for (int i = 0; i < vsize; ++i) {
+    black_rook_moves[i].print();
   }
   
   return 0;
