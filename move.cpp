@@ -29,3 +29,8 @@ Square Move::get_from_square()
 {
   return from_Square;
 }
+
+bool Move::operator==(const Move & othermove)
+{
+  return this->to_Square == othermove.to_Square && this->from_Square == othermove.from_Square;
+}

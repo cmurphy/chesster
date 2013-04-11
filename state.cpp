@@ -244,8 +244,22 @@ vector<Move> State::move_list(int x, int y)
   return moves;
 }
 
+vector<Move> State::all_moves()
+{
+  vector<Move> themoves;
+  for (int i = 0; i < BOARD_SIZE_X; ++i) {
+    for (int j = 0; j < BOARD_SIZE_Y; ++j) {
+      if (board[j][i] != '.') {
+        themoves = add_vector(themoves, move_list(i, j));
+      }
+    }
+  }
+  return themoves;
+}
+
 State State::make_move(Move newmove)
 {
+  newmove.print();
   Square from = newmove.get_from_square();
   Square to = newmove.get_to_square();
   int fromx = from.x;
@@ -254,13 +268,14 @@ State State::make_move(Move newmove)
   int toy = to.y;
   State newstate;
   try {
-    if (move_start_is_valid(fromx, fromy)) {
+    if (!move_start_is_valid(fromx, fromy)) { //TODO: this is dumb, make it smarter
       newstate.read_state(this->board);
       char piece = newstate.board[fromy][fromx];
       newstate.board[fromy][fromx] = '.';
       newstate.board[toy][tox] = piece;
       newstate.move = !move;
       newstate.num_moves = num_moves + 1;
+      newstate.print_state();
     } else {
       int e = 1;
       throw e;
@@ -269,4 +284,29 @@ State State::make_move(Move newmove)
     cout << "Not a valid move.\n";
   }
   return newstate;
+}
+
+State State::human_move(string move, vector<Move> & themoves)
+{
+  try {
+    if (!move_is_valid(move)) {
+      int e = 1;
+      throw e;
+    }
+    else {
+      int from_col = move[0] - 'a';
+      int from_row = move[1] - '1';
+      int to_col = move[3] - 'a';
+      int to_row = move[4] - '1';
+      Move newmove(from_col, from_row, to_col, to_row);
+      // Check if move is a valid move
+      vector<Move>::iterator i = find(themoves.begin(), themoves.end(), newmove);
+      if (i != themoves.end()) {
+        cout << "making a move" << endl;
+        return make_move(newmove);
+      }
+    }
+  } catch (int e) {
+      cout << "Not a valid input for move. Use form 'a1-b2'." << endl;
+  }
 }

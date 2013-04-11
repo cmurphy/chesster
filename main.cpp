@@ -77,7 +77,7 @@ int main()
   for (int i = 0; i < vsize; ++i) {
     white_knight_moves[i].print();
   }
-*/
+
   // Generate black knight moves
   vector<Move> black_knight_moves = board.move_list(1, 5);
   vsize = black_knight_moves.size();
@@ -89,30 +89,15 @@ int main()
   // Move the black knight
   State newboard = board.make_move(black_knight_moves[0]);
   newboard.print_state();
+*/
 
+  // Before each move, should generate a list of all valid moves by adding up each move vector it found
+  vector<Move> themoves = board.all_moves();
+  State newboard = board.human_move("b2-b3", themoves);
+  newboard.print_state();
   return 0;
 }
-/*
-bool is_color(char piece, bool color)
-{
-  if (piece >= 'B' && piece <= 'Q') {
-    if (color == white) {
-      return true;
-    }
-  }
-  else if (piece >= 'b' && piece <= 'q') {
-    if (color == black) {
-      return true;
-    }
-  }
-  return false;
-}
 
-bool is_empty(char piece)
-{
-  return piece == '.';
-}
-*/
 vector<Move> add_vector(vector<Move> oldv, vector<Move> newv)
 {
   int vsize = newv.size();
@@ -127,4 +112,11 @@ void swap(int & x, int & y)
   int tmp = x;
   x = y;
   y = tmp;
+}
+
+// Dinky user input validation
+// Should probably be implemented with regex if time
+bool move_is_valid(string move)
+{
+  return move.length() == 5 && move[0] >= 'a' && move[0] <= 'e' && move[1] >= '1' && move[1] <= '6' && move[2] == '-' && move[3] >= 'a' && move[3] <= 'e' && move[4] >= '1' && move[4] <= '6';
 }

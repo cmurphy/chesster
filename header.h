@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 using namespace std;
 
 const bool white = true;
@@ -9,9 +10,8 @@ const int MAX_MOVES = 40;
 const int BOARD_SIZE_X = 5;
 const int BOARD_SIZE_Y = 6;
 
-//bool is_color(char piece, bool color);
-//bool is_empty(char piece);
 void swap(int & x, int & y);
+bool move_is_valid(string move);
 
 class Square
 {
@@ -21,6 +21,7 @@ class Square
     Square();
     Square(int x, int y);
     void print();
+    bool operator==(const Square & othersquare);
 };
 
 class Move
@@ -34,6 +35,7 @@ class Move
     void print();
     Square get_to_square();
     Square get_from_square();
+    bool operator==(const Move & newmove);
 };
 
 vector<Move> add_vector(vector<Move> moves, vector<Move> tempmoves);
@@ -58,7 +60,8 @@ class State
     bool move_start_is_valid(int x0, int y0);
     vector<Move> move_gen(int x0, int y0, int dx, int dy, bool stop_short, bool capture);
     vector<Move> move_list(int x0, int y0);
+    vector<Move> all_moves();
     State make_move(Move move);
-    State human_move(string move);
+    State human_move(string move, vector<Move> & themoves);
 };
 
