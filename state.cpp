@@ -3,6 +3,7 @@
 State::State()
 {
   create_board();
+  game_over = false;
 }
 
 void State::create_board()
@@ -37,6 +38,7 @@ void State::create_board()
   board[5][2] = 'B';
   board[5][3] = 'Q';
   board[5][4] = 'K';
+  print_state();
 }
 
 void State::print_state()
@@ -259,7 +261,6 @@ vector<Move> State::all_moves()
 
 State State::make_move(Move newmove)
 {
-  newmove.print();
   Square from = newmove.get_from_square();
   Square to = newmove.get_to_square();
   int fromx = from.x;
@@ -276,6 +277,9 @@ State State::make_move(Move newmove)
       newstate.move = !move;
       newstate.num_moves = num_moves + 1;
       newstate.print_state();
+      if (toupper(board[toy][tox]) == 'K') {
+        game_over = true;
+      }
     } else {
       int e = 1;
       throw e;
@@ -309,4 +313,16 @@ State State::human_move(string move, vector<Move> & themoves)
   } catch (int e) {
       cout << "Not a valid input for move. Use form 'a1-b2'." << endl;
   }
+}
+
+// Scans the board looking for a king or if 40 moves have been played
+bool State::game_is_over()
+{
+  if (num_moves >= 40) {
+    return true;
+  }
+  if (game_over) {
+    return true;
+  }
+  return false;
 }

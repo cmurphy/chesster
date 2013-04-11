@@ -89,14 +89,29 @@ int main()
   // Move the black knight
   State newboard = board.make_move(black_knight_moves[0]);
   newboard.print_state();
-*/
 
   // Before each move, should generate a list of all valid moves by adding up each move vector it found
   vector<Move> themoves = board.all_moves();
   State newboard = board.human_move("b2-b3", themoves);
   newboard.print_state();
+*/
+/*
+  board.print_state();
+  srand(time(0));
+  int random, index;
+  vector<Move> themoves = board.all_moves();
+  Move move;
+  board.print_state();
+  while (!board.game_is_over()) {
+    random = rand();
+    index = random % themoves.size();
+    move = themoves[index];
+    board = board.make_move(move);
+    board.print_state();
+    themoves = board.all_moves();
+  } */
   return 0;
-}
+} // endmain
 
 vector<Move> add_vector(vector<Move> oldv, vector<Move> newv)
 {

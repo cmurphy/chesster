@@ -46,6 +46,7 @@ class State
     bool move;
     int num_moves;
     char board[BOARD_SIZE_X][BOARD_SIZE_Y];
+    bool game_over;
 
   public:
     State(); //constructor calls create_board
@@ -63,5 +64,6 @@ class State
     vector<Move> all_moves();
     State make_move(Move move);
     State human_move(string move, vector<Move> & themoves);
+    bool game_is_over();
 };
 
