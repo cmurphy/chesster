@@ -324,20 +324,3 @@ bool State::game_is_over()
   }
   return false;
 }
-
-/*
-State & State::operator=(const State & oldstate)
-{
-  if (this == &oldstate) // check for self assignment
-    return *this;
-  move = oldstate.move;
-  num_moves = oldstate.num_moves;
-  game_over = oldstate.game_over;
-  for (int i = 0; i < 5; ++i) {
-    for (int j = 0; j < 6; ++j) {
-      board[j][i] = oldstate.board[j][i];
-    }
-  }
-  return *this;
-}
-*/

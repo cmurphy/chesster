@@ -65,6 +65,5 @@ class State
     State make_move(Move move);
     State human_move(string move, vector<Move> & themoves);
     bool game_is_over();
-    //State & operator=(const State & oldstate);
 };
 
