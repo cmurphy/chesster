@@ -271,7 +271,7 @@ State State::make_move(Move newmove)
     if (move_start_is_valid(fromx, fromy)) {
       newstate.read_state(this->board);
       if (toupper(board[toy][tox]) == 'K') {
-        game_over = true;
+        newstate.game_over = true;
       }
       char piece = newstate.board[fromy][fromx];
       newstate.board[fromy][fromx] = '.';

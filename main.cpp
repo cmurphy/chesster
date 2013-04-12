@@ -106,7 +106,6 @@ int main()
     index = random % themoves.size();
     move = themoves[index];
     board = board.make_move(move);
-    cout << "state after make_move" << endl;
     board.print_state();
     cout << endl << endl;
     themoves = board.moves_for_side();
