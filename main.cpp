@@ -3,7 +3,6 @@
 int main()
 {
   State board;
-  board.print_state();
   int x0 = 0, y0 = 0, dx = 1, dy = 1;
   bool stop_short = false, capture = true;
   int vsize;
@@ -95,21 +94,23 @@ int main()
   State newboard = board.human_move("b2-b3", themoves);
   newboard.print_state();
 */
-/*
-  board.print_state();
+
   srand(time(0));
   int random, index;
-  vector<Move> themoves = board.all_moves();
+  vector<Move> themoves = board.moves_for_side();
   Move move;
   board.print_state();
   while (!board.game_is_over()) {
+//  for (int i = 0; i < 10; ++i) {
     random = rand();
     index = random % themoves.size();
     move = themoves[index];
     board = board.make_move(move);
+    cout << "state after make_move" << endl;
     board.print_state();
-    themoves = board.all_moves();
-  } */
+    cout << endl << endl;
+    themoves = board.moves_for_side();
+  }
   return 0;
 } // endmain
 

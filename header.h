@@ -45,14 +45,14 @@ class State
   private:
     bool move;
     int num_moves;
-    char board[BOARD_SIZE_X][BOARD_SIZE_Y];
     bool game_over;
+    char board[BOARD_SIZE_Y][BOARD_SIZE_X];
 
   public:
     State(); //constructor calls create_board
     void create_board();
     void print_state();
-    void read_state(char newboard[BOARD_SIZE_X][BOARD_SIZE_Y]);
+    void read_state(char newboard[BOARD_SIZE_Y][BOARD_SIZE_X]);
     bool square_is_empty(int x, int y);
     bool piece_is_white(int x, int y);
     bool piece_is_black(int x, int y);
@@ -61,9 +61,10 @@ class State
     bool move_start_is_valid(int x0, int y0);
     vector<Move> move_gen(int x0, int y0, int dx, int dy, bool stop_short, bool capture);
     vector<Move> move_list(int x0, int y0);
-    vector<Move> all_moves();
+    vector<Move> moves_for_side();
     State make_move(Move move);
     State human_move(string move, vector<Move> & themoves);
     bool game_is_over();
+    //State & operator=(const State & oldstate);
 };
 

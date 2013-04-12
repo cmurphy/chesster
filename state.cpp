@@ -38,7 +38,6 @@ void State::create_board()
   board[5][2] = 'B';
   board[5][3] = 'Q';
   board[5][4] = 'K';
-  print_state();
 }
 
 void State::print_state()
@@ -57,7 +56,7 @@ void State::print_state()
   }
 }
 
-void State::read_state(char newboard[BOARD_SIZE_X][BOARD_SIZE_Y])
+void State::read_state(char newboard[BOARD_SIZE_Y][BOARD_SIZE_X])
 {
   for (int i = 0; i < BOARD_SIZE_Y; ++i) {
     for (int j = 0; j < BOARD_SIZE_X; ++j) {
@@ -246,12 +245,12 @@ vector<Move> State::move_list(int x, int y)
   return moves;
 }
 
-vector<Move> State::all_moves()
+vector<Move> State::moves_for_side()
 {
   vector<Move> themoves;
   for (int i = 0; i < BOARD_SIZE_X; ++i) {
     for (int j = 0; j < BOARD_SIZE_Y; ++j) {
-      if (board[j][i] != '.') {
+      if (board[j][i] != '.' && piece_is_color(i, j, move)) {
         themoves = add_vector(themoves, move_list(i, j));
       }
     }
@@ -269,17 +268,16 @@ State State::make_move(Move newmove)
   int toy = to.y;
   State newstate;
   try {
-    if (!move_start_is_valid(fromx, fromy)) { //TODO: this is dumb, make it smarter
+    if (move_start_is_valid(fromx, fromy)) {
       newstate.read_state(this->board);
+      if (toupper(board[toy][tox]) == 'K') {
+        game_over = true;
+      }
       char piece = newstate.board[fromy][fromx];
       newstate.board[fromy][fromx] = '.';
       newstate.board[toy][tox] = piece;
       newstate.move = !move;
       newstate.num_moves = num_moves + 1;
-      newstate.print_state();
-      if (toupper(board[toy][tox]) == 'K') {
-        game_over = true;
-      }
     } else {
       int e = 1;
       throw e;
@@ -326,3 +324,20 @@ bool State::game_is_over()
   }
   return false;
 }
+
+/*
+State & State::operator=(const State & oldstate)
+{
+  if (this == &oldstate) // check for self assignment
+    return *this;
+  move = oldstate.move;
+  num_moves = oldstate.num_moves;
+  game_over = oldstate.game_over;
+  for (int i = 0; i < 5; ++i) {
+    for (int j = 0; j < 6; ++j) {
+      board[j][i] = oldstate.board[j][i];
+    }
+  }
+  return *this;
+}
+*/
