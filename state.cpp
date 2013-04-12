@@ -11,16 +11,14 @@ void State::create_board()
   move = white;
   num_moves = 0;
   // black pieces
-  board[0][0] = 'k';
-  board[0][1] = 'q';
-  board[0][2] = 'b';
-  board[0][3] = 'n';
-  board[0][4] = 'r';
+  board[0][0] = 'R';
+  board[0][1] = 'N';
+  board[0][2] = 'B';
+  board[0][3] = 'Q';
+  board[0][4] = 'K';
   // black pawns
-  for (int i = 0; i < 5; ++i) { board[1][i] = 'p'; }
+  for (int i = 0; i < 5; ++i) { board[1][i] = 'P'; }
   // blanks
-// testing
-
 //  for (int i = 0; i < 5; ++i) { board[1][i] = '.'; }
   for (int i = 2; i < 4; ++i) {
     for (int j = 0; j < 5; ++j) {
@@ -29,15 +27,15 @@ void State::create_board()
   }
 
  // white pawns
-  for (int i = 0; i < 5; ++i) { board[4][i] = 'P'; }
+  for (int i = 0; i < 5; ++i) { board[4][i] = 'p'; }
   // testing
 //  for (int i = 0; i < 5; ++i) { board[4][i] = '.'; }
   // white pieces
-  board[5][0] = 'R';
-  board[5][1] = 'N';
-  board[5][2] = 'B';
-  board[5][3] = 'Q';
-  board[5][4] = 'K';
+  board[5][0] = 'k';
+  board[5][1] = 'q';
+  board[5][2] = 'b';
+  board[5][3] = 'n';
+  board[5][4] = 'r';
 }
 
 void State::print_state()
@@ -48,7 +46,7 @@ void State::print_state()
   } else {
     cout << "B" << endl;
   }
-  for (int i = 0; i < 6; ++i) {
+  for (int i = 5; i >= 0; --i) {
     for (int j = 0; j < 5; ++j) {
       cout << board[i][j];
     }
@@ -222,7 +220,7 @@ vector<Move> State::move_list(int x, int y)
     case 'P':
     {
       int dir = 1;
-      if (piece == 'P') {
+      if (piece == 'p') {
         dir = -dir;
       }
       stop_short = true;
