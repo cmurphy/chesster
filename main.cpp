@@ -96,19 +96,25 @@ int main()
 */
 
   srand(time(0));
-  int random, index;
+  int random, index, size;
   vector<Move> themoves = board.moves_for_side();
   Move move;
   board.print_state();
   while (!board.game_is_over()) {
 //  for (int i = 0; i < 10; ++i) {
     random = rand();
-    index = random % themoves.size();
-    move = themoves[index];
-    board = board.make_move(move);
-    board.print_state();
-    cout << endl << endl;
-    themoves = board.moves_for_side();
+    size = themoves.size();
+    if (size != 0) {
+      index = random % size;
+      move = themoves[index];
+      board = board.make_move(move);
+      board.print_state();
+      cout << endl << endl;
+      themoves = board.moves_for_side();
+    }
+    else {
+      cout << "moves list had size 0" << endl;
+    }
   }
   return 0;
 } // endmain

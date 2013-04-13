@@ -22,3 +22,9 @@ bool Square::operator==(const Square & othersquare)
 {
   return this->x == othersquare.x && this->y == othersquare.y;
 }
+
+void Square::getxy(int & x, int & y)
+{
+  x = this->x;
+  y = this->y;
+}

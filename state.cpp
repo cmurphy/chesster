@@ -189,10 +189,9 @@ State State::make_move(Move newmove)
 {
   Square from = newmove.get_from_square();
   Square to = newmove.get_to_square();
-  int fromx = from.x;
-  int fromy = from.y;
-  int tox = to.x;
-  int toy = to.y;
+  int fromx, fromy, tox, toy;
+  from.getxy(fromx, fromy);
+  to.getxy(tox, toy);
   State newstate;
   try {
     if (move_start_is_valid(fromx, fromy)) {
@@ -205,6 +204,12 @@ State State::make_move(Move newmove)
       newstate.board[toy][tox] = piece;
       newstate.move = !move;
       newstate.num_moves = num_moves + 1;
+      if (piece == 'p' && toy == 0) {
+        newstate.board[toy][tox] = 'q';
+      }
+      if (piece == 'P' && toy == 5) {
+        newstate.board[toy][tox] = 'Q';
+      }
     } else {
       int e = 1;
       throw e;
@@ -309,12 +314,23 @@ void State::pawn_move(int x, int y, vector<Move> & moves, char piece)
   }
   bool stop_short = true;
   vector<Move> tempmoves = move_gen(x, y, -1, dir, stop_short);
-  if (tempmoves.size() == 1 && piece_is_capturable(tempmoves[0].get_to_square().x, tempmoves[0].get_to_square().y, (piece == 'P'))) {
-    moves = add_vector(moves, tempmoves);
+  
+  int tox, toy;
+  Square tosquare;
+  if (tempmoves.size() == 1) {
+    tosquare = tempmoves[0].get_to_square();
+    tosquare.getxy(tox, toy);
+    if (piece_is_capturable(tox, toy, (piece == 'P'))) {
+      moves = add_vector(moves, tempmoves);
+    }
   }
   tempmoves = move_gen(x, y, 1, dir, stop_short);
-  if (tempmoves.size() == 1 && piece_is_capturable(tempmoves[0].get_to_square().x, tempmoves[0].get_to_square().y, (piece == 'P'))) {
-    moves = add_vector(moves, tempmoves);
+  if (tempmoves.size() == 1) {
+    tosquare = tempmoves[0].get_to_square();
+    tosquare.getxy(tox, toy);
+    if (piece_is_capturable(tox, toy, (piece == 'P'))) {
+      moves = add_vector(moves, tempmoves);
+    }
   }
   bool capture = false;
   tempmoves = move_gen(x, y, 0, dir, stop_short, capture);

@@ -16,12 +16,14 @@ bool move_is_valid(string move);
 class Square
 {
   public:
-    int x;
-    int y;
     Square();
     Square(int x, int y);
     void print();
     bool operator==(const Square & othersquare);
+    void getxy(int & x, int & y);
+  private:
+    int x;
+    int y;
 };
 
 class Move
