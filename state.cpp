@@ -131,113 +131,42 @@ vector<Move> State::move_gen(int x0, int y0, int dx, int dy, bool stop_short = f
 vector<Move> State::move_list(int x, int y)
 {
   char piece = board[y][x];
-  vector<Move> moves, tempmoves;
   int dx = -1;
   int dy = -1;
+  vector<Move> moves, tempmoves;
   bool stop_short = false;
   bool capture = true;
   switch (piece) {
-    /*************** king or queen ****************/
     case 'q':
     case 'k':
     case 'Q':
     case 'K':
     {
-      while (dx <= 1) {
-        while (dy <= 1) {
-          if (dx == 0 && dy == 0) {
-            dy++;
-            continue;
-          }
-          stop_short = (piece == 'k' || piece == 'K');
-          tempmoves = move_gen(x, y, dx, dy, stop_short);
-          int vsize = tempmoves.size();
-          for (int i = 0; i < vsize; ++i) {
-            moves.push_back(tempmoves[i]);
-          }
-          ++dy;
-        }
-        ++dx;
-        dy = -1;
-      }
+      king_queen_move(x, y, moves, piece);
       break;
     }
-    /*************** bishop or rook ****************/
     case 'r':
     case 'b':
     case 'R':
     case 'B':
     {
-      dx = 1;
-      dy = 0;
-      stop_short = (piece == 'b' || piece == 'B');
-      capture = (piece == 'r' || piece == 'R');
-      for (int i = 1; i <= 4; ++i) {
-        moves = add_vector(moves, move_gen(x, y, dx, dy, stop_short, capture));
-        int tmp = dx;
-        dx = dy;
-        dy = tmp;
-        dy = -dy;
-      }
-      if (piece == 'b' || piece == 'B') {
-        dx = 1;
-        dy = 1;
-        stop_short = false;
-        capture = true;
-        for (int i = 1; i <= 4; ++i) {
-          moves = add_vector(moves, move_gen(x, y, dx, dy, stop_short, capture));
-          int tmp = dx;
-          dx = dy;
-          dy = tmp;
-          dy = -dy;
-        }
-      }
+      bishop_rook_move(x, y, moves, piece);
       break;
     }
-    /***************** knight ******************/
     case 'n':
     case 'N':
     {
-      dx = 1;
-      dy = 2;
-      stop_short = true;
-      for (int i = 1; i <= 4; ++i) {
-        moves = add_vector(moves, move_gen(x, y, dx, dy, stop_short));
-        swap(dx, dy);
-        dy = -dy;
-      }
-      dx = -1;
-      dy = 2;
-      for (int i = 1; i <= 4; ++i) {
-        moves = add_vector(moves, move_gen(x, y, dx, dy, stop_short));
-        swap(dx, dy);
-        dy = -dy;
-      }
+      knight_move(x, y, moves);
       break;
     }
-    /******************* pawn ******************/
     case 'p':
     case 'P':
     {
-      int dir = 1;
-      if (piece == 'p') {
-        dir = -dir;
-      }
-      stop_short = true;
-      tempmoves = move_gen(x, y, -1, dir, stop_short);
-      if (tempmoves.size() == 1 && piece_is_capturable(tempmoves[0].get_to_square().x, tempmoves[0].get_to_square().y, (piece == 'P'))) {
-        moves = add_vector(moves, tempmoves);
-      }
-      tempmoves = move_gen(x, y, 1, dir, stop_short);
-      if (tempmoves.size() == 1 && piece_is_capturable(tempmoves[0].get_to_square().x, tempmoves[0].get_to_square().y, (piece == 'P'))) {
-        moves = add_vector(moves, tempmoves);
-      }
-      capture = false;
-      tempmoves = move_gen(x, y, 0, dir, stop_short, capture);
-      moves = add_vector(moves, tempmoves);
-      break;
+          pawn_move(x, y, moves, piece);
+          break;
     }
     default:
+      // should probably throw an exception
       cout << "fail" << endl;
   } 
   return moves;
@@ -321,4 +250,73 @@ bool State::game_is_over()
     return true;
   }
   return false;
+}
+
+void State::king_queen_move(int x, int y, vector<Move> & moves, char piece)
+{
+  vector<Move> tempmoves;
+  bool stop_short;
+  for(int dx = -1; dx <= 1; ++dx) {
+    for (int dy = -1; dy <= 1; ++dy) {
+      if (dx == 0 && dy == 0) {
+        continue;
+      }
+      stop_short = (piece == 'k' || piece == 'K');
+      tempmoves = move_gen(x, y, dx, dy, stop_short);
+      int vsize = tempmoves.size();
+      add_vector(moves, tempmoves);
+    }
+  } 
+}
+
+void State::bishop_rook_move(int x, int y, vector<Move> & moves, char piece)
+{
+  int dx = 1;
+  int dy = 0;
+  bool stop_short = (piece == 'b' || piece == 'B');
+  bool capture = (piece == 'r' || piece == 'R');
+  for (int i = 1; i <= 4; ++i) {
+    moves = add_vector(moves, move_gen(x, y, dx, dy, stop_short, capture));
+    swap(dx, dy);
+    dy = -dy;
+  }
+}
+
+void State::knight_move(int x, int y, vector<Move> & moves)
+{
+  int dx = 1;
+  int dy = 2;
+  bool stop_short = true;
+  for (int i = 1; i <= 4; ++i) {
+    moves = add_vector(moves, move_gen(x, y, dx, dy, stop_short));
+    swap(dx, dy);
+    dy = -dy;
+  }
+  dx = -1;
+  dy = 2;
+  for (int i = 1; i <= 4; ++i) {
+    moves = add_vector(moves, move_gen(x, y, dx, dy, stop_short));
+    swap(dx, dy);
+    dy = -dy;
+  }
+}
+
+void State::pawn_move(int x, int y, vector<Move> & moves, char piece)
+{
+  int dir = 1;
+  if (piece == 'p') {
+    dir = -dir;
+  }
+  bool stop_short = true;
+  vector<Move> tempmoves = move_gen(x, y, -1, dir, stop_short);
+  if (tempmoves.size() == 1 && piece_is_capturable(tempmoves[0].get_to_square().x, tempmoves[0].get_to_square().y, (piece == 'P'))) {
+    moves = add_vector(moves, tempmoves);
+  }
+  tempmoves = move_gen(x, y, 1, dir, stop_short);
+  if (tempmoves.size() == 1 && piece_is_capturable(tempmoves[0].get_to_square().x, tempmoves[0].get_to_square().y, (piece == 'P'))) {
+    moves = add_vector(moves, tempmoves);
+  }
+  bool capture = false;
+  tempmoves = move_gen(x, y, 0, dir, stop_short, capture);
+  moves = add_vector(moves, tempmoves);
 }

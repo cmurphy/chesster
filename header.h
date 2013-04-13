@@ -45,8 +45,8 @@ class State
   private:
     bool move;
     int num_moves;
-    bool game_over;
     char board[BOARD_SIZE_Y][BOARD_SIZE_X];
+    bool game_over;
 
   public:
     State(); //constructor calls create_board
@@ -65,5 +65,9 @@ class State
     State make_move(Move move);
     State human_move(string move, vector<Move> & themoves);
     bool game_is_over();
+    void king_queen_move(int x, int y, vector<Move> & moves, char piece);
+    void bishop_rook_move(int x, int y, vector<Move> & moves, char piece);
+    void knight_move(int x, int y, vector<Move> & moves);
+    void pawn_move(int x, int y, vector<Move> & moves, char piece);
 };
 
