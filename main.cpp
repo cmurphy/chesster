@@ -1,112 +1,52 @@
 #include "header.h"
+#include <time.h>
 
 int main()
 {
+  clock_t start = clock();
   State board;
   int x0 = 0, y0 = 0, dx = 1, dy = 1;
   bool stop_short = false, capture = true;
   int vsize;
-/*
-  vector<Move> black_king_moves = board.move_list(x0, y0);
-  vsize = black_king_moves.size();
-  cout << "Black king's moves: \n";
-  for (int i = 0; i < vsize; ++i) {
-    black_king_moves[i].print();
-  }
 
-  vector<Move> black_queen_moves = board.move_list(1, 0);
-  vsize = black_queen_moves.size();
-  cout << "Black queen's moves: \n";
-  for (int i = 0; i < vsize; ++i) {
-    black_queen_moves[i].print();
-  }
-
-  vector<Move> black_pawn_moves;
-  for (int i = 0; i < 5; ++i) {
-    black_pawn_moves = add_vector(black_pawn_moves, board.move_list(i, 1));
-  }
-  vsize = black_pawn_moves.size();
-  cout << "Black pawns' moves: \n";
-  for (int i = 0; i < vsize; ++i) {
-    black_pawn_moves[i].print();
-  }
-
-  vector<Move> white_pawn_moves;
-  for (int i = 0; i < 5; ++i) {
-    white_pawn_moves = add_vector(white_pawn_moves, board.move_list(i, 4));
-  }
-  vsize = white_pawn_moves.size();
-  cout << "White pawns' moves: \n";
-  for (int i = 0; i < vsize; ++i) {
-    white_pawn_moves[i].print();
-  }
-
-  vector<Move> white_bishop_moves = board.move_list(2, 5);
-  vsize = white_bishop_moves.size();
-  cout << "White bishops' moves: \n";
-  for (int i = 0; i < vsize; ++i) {
-    white_bishop_moves[i].print();
-  }
-
-  vector<Move> black_bishop_moves = board.move_list(2, 0);
-  vsize = black_bishop_moves.size();
-  cout << "Black bishops' moves: \n";
-  for (int i = 0; i < vsize; ++i) {
-    black_bishop_moves[i].print();
-  }
-
-  vector<Move> white_rook_moves = board.move_list(0, 5);
-  vsize = white_rook_moves.size();
-  cout << "White rooks' moves: \n";
-  for (int i = 0; i < vsize; ++i) {
-    white_rook_moves[i].print();
-  }
-
-  vector<Move> black_rook_moves = board.move_list(4, 0);
-  vsize = black_rook_moves.size();
-  cout << "Black rooks' moves: \n";
-  for (int i = 0; i < vsize; ++i) {
-    black_rook_moves[i].print();
-  }
-
-
-  vector<Move> white_knight_moves = board.move_list(3, 0);
-  vsize = white_knight_moves.size();
-  cout << "White knight's moves: \n";
-  for (int i = 0; i < vsize; ++i) {
-    white_knight_moves[i].print();
-  }
-
-  // Generate black knight moves
-  vector<Move> black_knight_moves = board.move_list(1, 5);
-  vsize = black_knight_moves.size();
-  cout << "Black knight's moves: \n";
-  for (int i = 0; i < vsize; ++i) {
-    black_knight_moves[i].print();
-  }
-
-  // Move the black knight
-  State newboard = board.make_move(black_knight_moves[0]);
-  newboard.print_state();
-
-  // Before each move, should generate a list of all valid moves by adding up each move vector it found
-  vector<Move> themoves = board.all_moves();
-  State newboard = board.human_move("b2-b3", themoves);
-  newboard.print_state();
-*/
-
-  srand(time(0));
   int random, index, size;
-  vector<Move> themoves = board.moves_for_side();
   Move move;
+  vector<Move> themoves;
+  string human_move;
   board.print_state();
   while (!board.game_is_over()) {
-//  for (int i = 0; i < 10; ++i) {
-    random = rand();
+
+    /***** Human Move ******/
+    themoves = board.moves_for_side();
+    cout << "Human move!" << endl;
+    cout << "Enter your move (in the form a1-b2)" << endl;
+    cin >> human_move;
+    cin.ignore(100, '\n');
+    try {
+      board = board.human_move(human_move, themoves);
+    } catch (int e) {
+      if (e == 1) {
+        cout << "That string does not have a valid format. " << endl
+             << "Please use the format 'a1-b2'." << endl;
+        continue;
+      } else if (e == 2) {
+        cout << "You cannot move there. Try again." << endl;
+        continue;
+      } else {
+        cout << "This exception hasn't been implemented yet." << endl;
+        exit(1);
+      }
+    }
+    board.print_state();
+
+    if (board.game_is_over()) break;
+
+    /***** Bot Move ******/
+    themoves = board.moves_for_side();
+    cout << "Bot move!" << endl;
     size = themoves.size();
     if (size != 0) {
-      index = random % size;
-      move = themoves[index];
+      move = board.choose_move(themoves);
       board = board.make_move(move);
       board.print_state();
       cout << endl << endl;
@@ -116,6 +56,9 @@ int main()
       cout << "moves list had size 0" << endl;
     }
   }
+  clock_t diff = clock() - start;
+  diff = diff * 1000 / CLOCKS_PER_SEC;
+  cout << diff/1000 << "seconds " << diff%1000 << "milliseconds" << endl;
   return 0;
 } // endmain
 
@@ -135,8 +78,6 @@ void swap(int & x, int & y)
   y = tmp;
 }
 
-// Dinky user input validation
-// Should probably be implemented with regex if time
 bool move_is_valid(string move)
 {
   return move.length() == 5 && move[0] >= 'a' && move[0] <= 'e' && move[1] >= '1' && move[1] <= '6' && move[2] == '-' && move[3] >= 'a' && move[3] <= 'e' && move[4] >= '1' && move[4] <= '6';

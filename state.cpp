@@ -220,28 +220,26 @@ State State::make_move(Move newmove)
   return newstate;
 }
 
-State State::human_move(string move, vector<Move> & themoves)
+State State::human_move(string move, vector<Move> & themoves) throw (int)
 {
-  try {
-    if (!move_is_valid(move)) {
-      int e = 1;
-      throw e;
+  if (!move_is_valid(move)) { // only checks for validity of string, should check for validity of move
+    throw 1; // Move string is not valid
+  }
+  else {
+    int from_col = move[0] - 'a';
+    int from_row = move[1] - '1';
+    int to_col = move[3] - 'a';
+    int to_row = move[4] - '1';
+    Move newmove(from_col, from_row, to_col, to_row);
+    // Check if move is a valid move
+    vector<Move>::iterator i = find(themoves.begin(), themoves.end(), newmove);
+    if (i != themoves.end()) {
+      cout << "making a move" << endl;
+      return make_move(newmove);
     }
     else {
-      int from_col = move[0] - 'a';
-      int from_row = move[1] - '1';
-      int to_col = move[3] - 'a';
-      int to_row = move[4] - '1';
-      Move newmove(from_col, from_row, to_col, to_row);
-      // Check if move is a valid move
-      vector<Move>::iterator i = find(themoves.begin(), themoves.end(), newmove);
-      if (i != themoves.end()) {
-        cout << "making a move" << endl;
-        return make_move(newmove);
-      }
+      throw 2; // Move was not in valid moves list
     }
-  } catch (int e) {
-      cout << "Not a valid input for move. Use form 'a1-b2'." << endl;
   }
 }
 
@@ -335,4 +333,93 @@ void State::pawn_move(int x, int y, vector<Move> & moves, char piece)
   bool capture = false;
   tempmoves = move_gen(x, y, 0, dir, stop_short, capture);
   moves = add_vector(moves, tempmoves);
+}
+
+int State::evaluate(bool side)
+{
+  int whitescore = 0, blackscore = 0;
+  char piece;
+  for(int i = 0; i < 6; ++i) {
+    for(int j = 0; j < 5; ++j) {
+      piece = board[i][j];
+      switch(piece) {
+        case 'P':
+        {
+          whitescore += 100;
+          break;
+        }
+        case 'B':
+        case 'N':
+        {
+          whitescore += 300;
+          break;
+        }
+        case 'R':
+        {
+          whitescore += 500;
+          break;
+        }
+        case 'Q':
+        {
+          whitescore += 900;
+          break;
+        }
+        case 'p':
+        {
+          blackscore += 100;
+          break;
+        }
+        case 'b':
+        case 'n':
+        {
+          blackscore += 300;
+          break;
+        }
+        case 'r':
+        {
+          blackscore += 500;
+          break;
+        }
+        case 'q':
+        {
+          blackscore += 900;
+          break;
+        }
+        default:
+        {
+          break;
+        }
+      }
+    }
+  }
+  if (side == white) {
+    return whitescore - blackscore;
+  }
+  return blackscore - whitescore;
+}
+
+Move State::choose_move(vector<Move> & themoves)
+{
+  //TODO: On first move, computer always makes the same move. Change it up a bit.
+  int size = themoves.size();
+  State potential_state;
+  Move newmove;
+    if (size > 0) {
+      potential_state = make_move(themoves[0]);
+      int tmpscore = potential_state.evaluate(!move);
+      int score = tmpscore;
+      newmove = themoves[0];
+      for (int i = 1; i < size; ++i) {
+        potential_state = this->make_move(themoves[i]);
+        tmpscore = potential_state.evaluate(!move);
+        if (tmpscore < score) {
+          score = tmpscore;
+          newmove = themoves[i];
+        }
+      }
+    }
+    else {
+      //throw error
+    }
+  return newmove;
 }

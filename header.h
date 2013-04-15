@@ -54,6 +54,7 @@ class State
     State(); //constructor calls create_board
     void create_board();
     void print_state();
+    void get_state(char board[BOARD_SIZE_Y][BOARD_SIZE_X]);
     void read_state(char newboard[BOARD_SIZE_Y][BOARD_SIZE_X]);
     bool square_is_empty(int x, int y);
     bool piece_is_white(int x, int y);
@@ -65,11 +66,13 @@ class State
     vector<Move> move_list(int x0, int y0);
     vector<Move> moves_for_side();
     State make_move(Move move);
-    State human_move(string move, vector<Move> & themoves);
+    State human_move(string move, vector<Move> & themoves) throw (int);
     bool game_is_over();
     void king_queen_move(int x, int y, vector<Move> & moves, char piece);
     void bishop_rook_move(int x, int y, vector<Move> & moves, char piece);
     void knight_move(int x, int y, vector<Move> & moves);
     void pawn_move(int x, int y, vector<Move> & moves, char piece);
+    int evaluate(bool side);
+    Move choose_move(vector<Move> & themoves);
 };
 
