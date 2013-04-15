@@ -9,7 +9,7 @@ State::State()
 void State::create_board()
 {
   move = white;
-  num_moves = 0;
+  num_moves = 1;
   // black pieces
   board[0][0] = 'R';
   board[0][1] = 'N';
@@ -185,6 +185,11 @@ vector<Move> State::moves_for_side()
   return themoves;
 }
 
+void State::update_move_count()
+{
+  ++num_moves;
+}
+
 State State::make_move(Move newmove)
 {
   Square from = newmove.get_from_square();
@@ -203,7 +208,6 @@ State State::make_move(Move newmove)
       newstate.board[fromy][fromx] = '.';
       newstate.board[toy][tox] = piece;
       newstate.move = !move;
-      newstate.num_moves = num_moves + 1;
       if (piece == 'p' && toy == 0) {
         newstate.board[toy][tox] = 'q';
       }
@@ -398,28 +402,28 @@ int State::evaluate(bool side)
   return blackscore - whitescore;
 }
 
-Move State::choose_move(vector<Move> & themoves)
+Move State::choose_move(vector<Move> & themoves) throw (int)
 {
   //TODO: On first move, computer always makes the same move. Change it up a bit.
   int size = themoves.size();
   State potential_state;
   Move newmove;
-    if (size > 0) {
-      potential_state = make_move(themoves[0]);
-      int tmpscore = potential_state.evaluate(!move);
-      int score = tmpscore;
-      newmove = themoves[0];
-      for (int i = 1; i < size; ++i) {
-        potential_state = this->make_move(themoves[i]);
-        tmpscore = potential_state.evaluate(!move);
-        if (tmpscore < score) {
-          score = tmpscore;
-          newmove = themoves[i];
-        }
+  if (size > 0) {
+    potential_state = make_move(themoves[0]);
+    int tmpscore = potential_state.evaluate(!move);
+    int score = tmpscore;
+    newmove = themoves[0];
+    for (int i = 1; i < size; ++i) {
+      potential_state = this->make_move(themoves[i]);
+      tmpscore = potential_state.evaluate(!move);
+      if (tmpscore < score) {
+        score = tmpscore;
+        newmove = themoves[i];
       }
     }
-    else {
-      //throw error
-    }
+  }
+  else {
+    throw 1;
+  }
   return newmove;
 }

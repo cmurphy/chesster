@@ -65,6 +65,7 @@ class State
     vector<Move> move_gen(int x0, int y0, int dx, int dy, bool stop_short, bool capture);
     vector<Move> move_list(int x0, int y0);
     vector<Move> moves_for_side();
+    void update_move_count();
     State make_move(Move move);
     State human_move(string move, vector<Move> & themoves) throw (int);
     bool game_is_over();
@@ -73,6 +74,6 @@ class State
     void knight_move(int x, int y, vector<Move> & moves);
     void pawn_move(int x, int y, vector<Move> & moves, char piece);
     int evaluate(bool side);
-    Move choose_move(vector<Move> & themoves);
+    Move choose_move(vector<Move> & themoves) throw (int);
 };
 

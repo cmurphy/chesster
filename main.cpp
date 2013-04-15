@@ -46,8 +46,15 @@ int main()
     cout << "Bot move!" << endl;
     size = themoves.size();
     if (size != 0) {
-      move = board.choose_move(themoves);
+      try {
+        move = board.choose_move(themoves);
+      } catch (int e) {
+        // No more moves
+        cout << "There are no more moves! Stalemate." << endl;
+        break;
+      }
       board = board.make_move(move);
+      board.update_move_count();
       board.print_state();
       cout << endl << endl;
       themoves = board.moves_for_side();
