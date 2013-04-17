@@ -47,7 +47,7 @@ class State
 {
   private:
     bool move;
-    int num_moves;
+    int round;
     char board[BOARD_SIZE_Y][BOARD_SIZE_X];
     bool game_over;
 

@@ -23,7 +23,11 @@ int main(int argc, char * argv[])
   vector<Move> themoves;
   int random, index, size;
   Move move;
+
+  cout << "Starting board" << endl;
   board.print_state();
+  cout << endl;
+  board.update_move_count(); // Display board at round 0, but once play commences we start at round 1
   int game_over = 2;
   while (!board.game_is_over()) {
 

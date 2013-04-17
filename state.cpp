@@ -9,7 +9,7 @@ State::State()
 void State::create_board()
 {
   move = white;
-  num_moves = 1;
+  round = 0;
   // black pieces
   board[0][0] = 'R';
   board[0][1] = 'N';
@@ -40,7 +40,7 @@ void State::create_board()
 
 void State::print_state()
 {
-  cout << num_moves << " ";
+  cout << round << " ";
   if (move == white) {
     cout << "W" << endl;
   } else {
@@ -192,7 +192,7 @@ vector<Move> State::moves_for_side()
 
 void State::update_move_count()
 {
-  ++num_moves;
+  ++round;
 }
 
 State State::make_move(Move newmove)
@@ -213,7 +213,7 @@ State State::make_move(Move newmove)
       newstate.board[fromy][fromx] = '.';
       newstate.board[toy][tox] = piece;
       newstate.move = !move;
-      newstate.num_moves = num_moves;
+      newstate.round = round;
       if (piece == 'p' && toy == 0) {
         newstate.board[toy][tox] = 'q';
       }
@@ -256,7 +256,7 @@ State State::human_move(string move, vector<Move> & themoves) throw (int)
 // Scans the board looking for a king or if 40 moves have been played
 bool State::game_is_over()
 {
-  if (num_moves >= 40) {
+  if (round >= 40) {
     return true;
   }
   if (game_over) {
