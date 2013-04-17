@@ -202,7 +202,7 @@ State State::make_move(Move newmove)
   int fromx, fromy, tox, toy;
   from.getxy(fromx, fromy);
   to.getxy(tox, toy);
-  State newstate;
+  State newstate; //TODO: test copy constructor
   try {
     if (move_start_is_valid(fromx, fromy)) {
       newstate.read_state(this->board);
@@ -213,6 +213,7 @@ State State::make_move(Move newmove)
       newstate.board[fromy][fromx] = '.';
       newstate.board[toy][tox] = piece;
       newstate.move = !move;
+      newstate.num_moves = num_moves;
       if (piece == 'p' && toy == 0) {
         newstate.board[toy][tox] = 'q';
       }
