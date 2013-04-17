@@ -2,8 +2,6 @@
 
 Move::Move()
 {
-  to_Square.x = 0;
-  to_Square.y = 0;
 }
 
 Move::Move(int x0, int y0, int xn, int yn)

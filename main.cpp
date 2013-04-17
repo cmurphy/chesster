@@ -6,7 +6,7 @@ int main(int argc, char * argv[])
   bool botplay = false;
   // Deal with optional arguments, if any
   if (argc > 1) {
-    if (strcmp(argv[1], "--botplay")) {
+    if (!strcmp(argv[1], "--botplay")) {
       botplay = true;
     }
     else {
@@ -24,12 +24,16 @@ int main(int argc, char * argv[])
   int random, index, size;
   Move move;
   board.print_state();
-  int game_over = 1;
+  int game_over = 2;
   while (!board.game_is_over()) {
 
     if (botplay) {
+      game_over = bot_play(board, themoves);
+      if (game_over == 0) {
+        break;
+      }
     }
-    else {
+/*    else {
       game_over = human_play(board, themoves);
       if (game_over == 1) {
         continue;
@@ -37,7 +41,12 @@ int main(int argc, char * argv[])
       else if (game_over == 0) {
         break;
       }
-    }
+      game_over = bot_play(board, themoves);
+      if (game_over == 0) {
+        break;
+      }
+    } */
+    board.update_move_count();
   }
 
   clock_t diff = clock() - start;
@@ -45,22 +54,6 @@ int main(int argc, char * argv[])
   cout << diff/1000 << "seconds " << diff%1000 << "milliseconds" << endl;
   return 0;
 } // endmain
-
-vector<Move> add_vector(vector<Move> oldv, vector<Move> newv)
-{
-  int vsize = newv.size();
-  for(int i = 0; i < vsize; ++i) {
-    oldv.push_back(newv[i]);
-  }
-  return oldv;
-}
-
-void swap(int & x, int & y)
-{
-  int tmp = x;
-  x = y;
-  y = tmp;
-}
 
 bool move_is_valid(string move)
 {
@@ -70,7 +63,6 @@ bool move_is_valid(string move)
 // Return 0 if game is over, return 1 if loop should continue
 int human_play(State & board, vector<Move> & themoves)
 {
-  int size;
   // ***** Human Move ****** /
   int turn_value = human_turn(board, themoves);
   if (turn_value != 2) {
@@ -80,33 +72,29 @@ int human_play(State & board, vector<Move> & themoves)
   if (board.game_is_over()) return 0;
 
   // ***** Bot Move ****** /
-  themoves = board.moves_for_side();
-  cout << "Bot move!" << endl;
-  size = themoves.size();
-  Move move;
-  if (size != 0) {
-    try {
-      move = board.choose_move(themoves);
-    } catch (int e) {
-      // No more moves
-      cout << "There are no more moves! Stalemate." << endl;
-      return 0;
-    }
-    board = board.make_move(move);
-    board.update_move_count();
-    board.print_state();
-    cout << endl << endl;
-    themoves = board.moves_for_side();
+  turn_value = bot_turn(board, themoves);
+  if (turn_value == 0){
+    return turn_value;
   }
-  else {
-    cout << "moves list had size 0" << endl;
-  }
-
+  return 2;
 }
 
 int bot_play(State & board, vector<Move> & themoves)
 {
-
+  // White move
+  int turn_value = bot_turn(board, themoves);
+  if (turn_value == 0) {
+    return turn_value;
+  }
+  if (board.game_is_over()) return 0;
+  sleep(4);
+  // Black move
+  turn_value = bot_turn(board, themoves);
+  if (turn_value == 0) {
+    return turn_value;
+  }
+  sleep(4);
+  return 1;
 }
 
 int human_turn(State & board, vector<Move> & themoves)
@@ -136,4 +124,36 @@ int human_turn(State & board, vector<Move> & themoves)
   board.print_state();
   cout << endl;
   return 2; // exit normally
+}
+
+int bot_turn(State & board, vector<Move> & themoves)
+{
+  int size;
+  themoves = board.moves_for_side();
+  //cout << "Bot move!" << endl;
+  if (board.on_move() == white) {
+    cout << "White move!" << endl;
+  }
+  else {
+    cout << "Black move!" << endl;
+  }
+  size = themoves.size();
+  Move move;
+  if (size != 0) {
+    try {
+      move = board.choose_move(themoves);
+    } catch (int e) {
+      // No more moves
+      cout << "There are no more moves! Stalemate." << endl;
+      return 0;
+    }
+    board = board.make_move(move);
+    board.print_state();
+    cout << endl << endl;
+//    themoves = board.moves_for_side();
+  }
+  else {
+    cout << "moves list had size 0" << endl;
+  }
+  return 1;
 }
