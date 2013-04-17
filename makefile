@@ -1,7 +1,7 @@
 all: a.out
 
-a.out: main.o square.o move.o state.o
-	g++ -g main.o square.o move.o state.o
+a.out: main.o square.o move.o state.o negamax.o
+	g++ -g main.o square.o move.o state.o negamax.o
 
 main.o: main.cpp
 	g++ -c -g main.cpp
@@ -14,3 +14,6 @@ move.o: move.cpp
 
 state.o: state.cpp
 	g++ -c -g state.cpp
+
+negamax.o: negamax.cpp
+	g++ -c -g negamax.cpp

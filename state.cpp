@@ -63,6 +63,11 @@ void State::read_state(char newboard[BOARD_SIZE_Y][BOARD_SIZE_X])
   }
 }
 
+bool State::on_move()
+{
+  return move;
+}
+
 bool State::square_is_empty(int x, int y)
 {
   return board[y][x] == '.';
@@ -271,7 +276,7 @@ void State::king_queen_move(int x, int y, vector<Move> & moves, char piece)
       stop_short = (piece == 'k' || piece == 'K');
       tempmoves = move_gen(x, y, dx, dy, stop_short);
       int vsize = tempmoves.size();
-      add_vector(moves, tempmoves);
+      moves = add_vector(moves, tempmoves);
     }
   } 
 }
@@ -365,7 +370,12 @@ int State::evaluate(bool side)
         }
         case 'Q':
         {
-          whitescore += 900;
+          whitescore += 1000;
+          break;
+        }
+        case 'K':
+        {
+          whitescore += 2000;
           break;
         }
         case 'p':
@@ -386,7 +396,12 @@ int State::evaluate(bool side)
         }
         case 'q':
         {
-          blackscore += 900;
+          blackscore += 1000;
+          break;
+        }
+        case 'k':
+        {
+          blackscore += 2000;
           break;
         }
         default:
@@ -409,6 +424,7 @@ Move State::choose_move(vector<Move> & themoves) throw (int)
   State potential_state;
   Move newmove;
   if (size > 0) {
+  /*
     potential_state = make_move(themoves[0]);
     int tmpscore = potential_state.evaluate(!move);
     int score = tmpscore;
@@ -420,10 +436,26 @@ Move State::choose_move(vector<Move> & themoves) throw (int)
         score = tmpscore;
         newmove = themoves[i];
       }
-    }
+    } */
+  negamax(*this, 1, newmove);
   }
   else {
     throw 1;
   }
   return newmove;
+}
+
+bool State::is_final()
+{
+  for (int i = 0; i < 6; ++i) {
+    for (int j = 0; j < 5; ++j) {
+      if (move == white && board[i][j] == 'K') {
+        return false;
+      }
+      if (move == black && board[i][j] == 'k') {
+        return false;
+      }
+    }
+  }
+  return true;
 }

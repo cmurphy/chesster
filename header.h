@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <cstring>
 using namespace std;
 
 const bool white = true;
@@ -75,5 +76,12 @@ class State
     void pawn_move(int x, int y, vector<Move> & moves, char piece);
     int evaluate(bool side);
     Move choose_move(vector<Move> & themoves) throw (int);
+    bool is_final();
+    bool on_move();
 };
 
+int negamax(State current_state, int depth, Move & best_move);
+int human_play(State & board, vector<Move> & themoves);
+int bot_play(State & board, vector<Move> & themoves);
+int human_turn(State & board, vector<Move> & themoves);
+void bot_turn(State & board, vector<Move> & themoves);
