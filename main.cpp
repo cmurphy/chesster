@@ -37,7 +37,7 @@ int main(int argc, char * argv[])
         break;
       }
     }
-/*    else {
+    else {
       game_over = human_play(board, themoves);
       if (game_over == 1) {
         continue;
@@ -49,7 +49,7 @@ int main(int argc, char * argv[])
       if (game_over == 0) {
         break;
       }
-    } */
+    }
     board.update_move_count();
   }
 
@@ -91,12 +91,14 @@ int bot_play(State & board, vector<Move> & themoves)
     return turn_value;
   }
   if (board.game_is_over()) return 0;
+  board.update_side_on_move();
   sleep(4);
   // Black move
   turn_value = bot_turn(board, themoves);
   if (turn_value == 0) {
     return turn_value;
   }
+  board.update_side_on_move();
   sleep(4);
   return 1;
 }
@@ -154,7 +156,6 @@ int bot_turn(State & board, vector<Move> & themoves)
     board = board.make_move(move);
     board.print_state();
     cout << endl << endl;
-//    themoves = board.moves_for_side();
   }
   else {
     cout << "moves list had size 0" << endl;

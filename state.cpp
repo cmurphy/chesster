@@ -8,7 +8,7 @@ State::State()
 
 void State::create_board()
 {
-  move = white;
+  side_on_move = white;
   round = 0;
   // black pieces
   board[0][0] = 'R';
@@ -41,7 +41,7 @@ void State::create_board()
 void State::print_state()
 {
   cout << round << " ";
-  if (move == white) {
+  if (side_on_move == white) {
     cout << "W" << endl;
   } else {
     cout << "B" << endl;
@@ -65,7 +65,7 @@ void State::read_state(char newboard[BOARD_SIZE_Y][BOARD_SIZE_X])
 
 bool State::on_move()
 {
-  return move;
+  return side_on_move;
 }
 
 bool State::square_is_empty(int x, int y)
@@ -103,7 +103,7 @@ bool State::piece_is_capturable(int x, int y, bool color)
 
 bool State::move_start_is_valid(int x0, int y0)
 {
-  return (board[y0][x0] != '.' && piece_is_color(x0, y0, move));
+  return (board[y0][x0] != '.' && piece_is_color(x0, y0, side_on_move));
 }
 
 vector<Move> State::move_gen(int x0, int y0, int dx, int dy, bool stop_short = false, bool capture = true)
@@ -182,7 +182,7 @@ vector<Move> State::moves_for_side()
   vector<Move> themoves;
   for (int i = 0; i < BOARD_SIZE_X; ++i) {
     for (int j = 0; j < BOARD_SIZE_Y; ++j) {
-      if (board[j][i] != '.' && piece_is_color(i, j, move)) {
+      if (board[j][i] != '.' && piece_is_color(i, j, side_on_move)) {
         themoves = add_vector(themoves, move_list(i, j));
       }
     }
@@ -193,6 +193,11 @@ vector<Move> State::moves_for_side()
 void State::update_move_count()
 {
   ++round;
+}
+
+void State::update_side_on_move()
+{
+  side_on_move = !side_on_move;
 }
 
 State State::make_move(Move newmove)
@@ -212,8 +217,8 @@ State State::make_move(Move newmove)
       char piece = newstate.board[fromy][fromx];
       newstate.board[fromy][fromx] = '.';
       newstate.board[toy][tox] = piece;
-      newstate.move = !move;
       newstate.round = round;
+      newstate.side_on_move = side_on_move; // will be updated after move is made
       if (piece == 'p' && toy == 0) {
         newstate.board[toy][tox] = 'q';
       }
@@ -438,7 +443,8 @@ Move State::choose_move(vector<Move> & themoves) throw (int)
         newmove = themoves[i];
       }
     } */
-  negamax(*this, 1, newmove);
+  newmove = themoves[0];
+  negamax(*this, 2, newmove);
   }
   else {
     throw 1;
@@ -450,10 +456,10 @@ bool State::is_final()
 {
   for (int i = 0; i < 6; ++i) {
     for (int j = 0; j < 5; ++j) {
-      if (move == white && board[i][j] == 'K') {
+      if (side_on_move == white && board[i][j] == 'K') {
         return false;
       }
-      if (move == black && board[i][j] == 'k') {
+      if (side_on_move == black && board[i][j] == 'k') {
         return false;
       }
     }

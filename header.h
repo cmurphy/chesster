@@ -46,7 +46,7 @@ vector<Move> add_vector(vector<Move> moves, vector<Move> tempmoves);
 class State
 {
   private:
-    bool move;
+    bool side_on_move;
     int round;
     char board[BOARD_SIZE_Y][BOARD_SIZE_X];
     bool game_over;
@@ -67,6 +67,7 @@ class State
     vector<Move> move_list(int x0, int y0);
     vector<Move> moves_for_side();
     void update_move_count();
+    void update_side_on_move();
     State make_move(Move move);
     State human_move(string move, vector<Move> & themoves) throw (int);
     bool game_is_over();

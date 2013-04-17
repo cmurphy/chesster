@@ -7,7 +7,6 @@ int negamax(State current_state, int depth, Move & best_move)
   }
   vector<Move> moves = current_state.moves_for_side();
   Move next_move = moves[0];
-  best_move = next_move;
   State potential_state = current_state.make_move(next_move);
   int max = -(negamax(potential_state, depth - 1, best_move));
   int value;
