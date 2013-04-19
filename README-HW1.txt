@@ -4,10 +4,6 @@ Chess bot for CS 442 with Bart Massey, Portland State University
 
 Homework 1
 
-2d array
-c++
-vectors for move list
-
 I wrote this assignment in C++. It is the language I am most comfortable in and
 I felt that a low-level language like C++ would allow me the control to design 
 a fast program. C++ can be object-oriented, and the assignment seems to call 
