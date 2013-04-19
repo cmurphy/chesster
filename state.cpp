@@ -444,7 +444,7 @@ Move State::choose_move(vector<Move> & themoves) throw (int)
       }
     } */
     //newmove = themoves[0];
-    negamax(*this, 5, newmove);
+    negamax(*this, MAX_DEPTH, newmove);
     Move empty_move;
     if (newmove == empty_move) {
 //      srand(0);

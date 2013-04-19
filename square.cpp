@@ -23,6 +23,13 @@ bool Square::operator==(const Square & othersquare)
   return this->x == othersquare.x && this->y == othersquare.y;
 }
 
+ostream & operator<<(ostream & out, const Square & asquare)
+{
+  out << (char) (asquare.x + 'a');
+  out << (int) (asquare.y + 1);
+  return out;
+}
+
 void Square::getxy(int & x, int & y)
 {
   x = this->x;

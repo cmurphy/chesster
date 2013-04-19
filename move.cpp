@@ -31,3 +31,11 @@ bool Move::operator==(const Move & othermove)
 {
   return this->to_Square == othermove.to_Square && this->from_Square == othermove.from_Square;
 }
+
+ostream & operator<<(ostream & out, const Move & amove)
+{
+  out << amove.from_Square;
+  out << "-";
+  out << amove.to_Square;
+  return out;
+}

@@ -5,11 +5,17 @@
 #include <cstring>
 using namespace std;
 
+#ifdef DEBUG
+#undef DEBUG
+#endif
+#define DEBUG
+
 const bool white = true;
 const bool black = false;
 const int MAX_MOVES = 40;
 const int BOARD_SIZE_X = 5;
 const int BOARD_SIZE_Y = 6;
+const int MAX_DEPTH = 2;
 
 void swap(int & x, int & y);
 bool move_is_valid(string move);
@@ -21,6 +27,7 @@ class Square
     Square(int x, int y);
     void print();
     bool operator==(const Square & othersquare);
+    friend ostream & operator<<(ostream & out, const Square & asquare);
     void getxy(int & x, int & y);
   private:
     int x;
@@ -39,6 +46,7 @@ class Move
     Square get_to_square();
     Square get_from_square();
     bool operator==(const Move & newmove);
+    friend ostream & operator<<(ostream & out, const Move & amove);
 };
 
 struct negamax_ret
