@@ -41,6 +41,12 @@ class Move
     bool operator==(const Move & newmove);
 };
 
+struct negamax_ret
+{
+  int value;
+  Move best_move;
+};
+
 vector<Move> add_vector(vector<Move> moves, vector<Move> tempmoves);
 
 class State

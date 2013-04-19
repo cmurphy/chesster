@@ -93,6 +93,8 @@ int bot_play(State & board, vector<Move> & themoves)
   if (board.game_is_over()) return 0;
   board.update_side_on_move();
   sleep(4);
+  //char tmp;
+  //cin >> tmp;
   // Black move
   turn_value = bot_turn(board, themoves);
   if (turn_value == 0) {
@@ -100,6 +102,7 @@ int bot_play(State & board, vector<Move> & themoves)
   }
   board.update_side_on_move();
   sleep(4);
+  //cin >> tmp;
   return 1;
 }
 

@@ -15,7 +15,6 @@ void Move::print()
   from_Square.print();
   cout << "->";
   to_Square.print();
-  cout << endl;
 }
 
 Square Move::get_to_square()

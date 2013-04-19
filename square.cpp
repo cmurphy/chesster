@@ -15,7 +15,7 @@ Square::Square(int x, int y)
 void Square::print()
 {
   cout << (char) (this->x + 'a');
-  cout << (int) (this->y);
+  cout << (int) (this->y + 1);
 }
 
 bool Square::operator==(const Square & othersquare)

@@ -443,8 +443,14 @@ Move State::choose_move(vector<Move> & themoves) throw (int)
         newmove = themoves[i];
       }
     } */
-  newmove = themoves[0];
-  negamax(*this, 2, newmove);
+    //newmove = themoves[0];
+    negamax(*this, 5, newmove);
+    Move empty_move;
+    if (newmove == empty_move) {
+//      srand(0);
+//      newmove = themoves[rand() % themoves.size()];
+        newmove = themoves[0];
+    }
   }
   else {
     throw 1;
