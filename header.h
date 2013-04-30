@@ -15,7 +15,10 @@ const bool black = false;
 const int MAX_MOVES = 40;
 const int BOARD_SIZE_X = 5;
 const int BOARD_SIZE_Y = 6;
-const int MAX_DEPTH = 2;
+const int MAX_DEPTH = 3;
+const int MAX_TIME = 10000;
+
+extern int g_max_depth;
 
 void swap(int & x, int & y);
 bool move_is_valid(string move);
@@ -68,7 +71,7 @@ class State
   public:
     State(); //constructor calls create_board
     void create_board();
-    void print_state();
+    void print();
     void get_state(char board[BOARD_SIZE_Y][BOARD_SIZE_X]);
     void read_state(char newboard[BOARD_SIZE_Y][BOARD_SIZE_X]);
     bool square_is_empty(int x, int y);

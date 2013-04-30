@@ -1,3 +1,9 @@
+//TODO: Right now negamax will avoid making a good move now in favor of
+// what it thinks is a possible better move in the future. If it 
+// doesn't see any good moves in the future, it will take the first
+// move in the list, which is usually useless. Add logic and 
+// randomization to make better moves. Also make better evaluator.
+
 #include "header.h"
 
 int negamax(State current_state, int depth, Move & final_best_move)
@@ -16,7 +22,7 @@ int negamax(State current_state, int depth, Move & final_best_move)
   potential_state.update_side_on_move();
   #ifdef DEBUG
     cout << endl;
-    for (int i = depth; i < MAX_DEPTH; ++i) { cout << "\t"; }
+    for (int i = depth; i < g_max_depth; ++i) { cout << "\t"; }
     if (current_state.on_move() == white) {
       cout << "<move-white " << next_move << ">";
     } else {
@@ -31,7 +37,7 @@ int negamax(State current_state, int depth, Move & final_best_move)
     potential_state = current_state.make_move(next_move);
     potential_state.update_side_on_move();
     #ifdef DEBUG
-      for (int i = depth; i < MAX_DEPTH; ++i) { cout << "\t"; }
+      for (int i = depth; i < g_max_depth; ++i) { cout << "\t"; }
       if (current_state.on_move() == white) {
         cout << "<move-white " << next_move << ">";
       } else {
@@ -48,11 +54,23 @@ int negamax(State current_state, int depth, Move & final_best_move)
   #ifdef DEBUG
     bool move = current_state.on_move();
     cout << endl;
-    for (int i = depth; i < MAX_DEPTH; ++i) { cout << "\t"; }
+    for (int i = depth; i < g_max_depth; ++i) { cout << "\t"; }
+    cout << "Potential state before best move at this level: " << endl;
+    cout << "------------------------------------------------" << endl;
+    cout << "Level: " << depth << endl;
+    current_state.print();
+    cout << "------------------------------------------------" << endl;
+    cout << endl;
+    for (int i = depth; i < g_max_depth; ++i) { cout << "\t"; }
     if (move == white) { cout << "Best white score: "; }
     else { cout << "Best black score: "; }
     cout << max;
     cout << endl;
+    for (int i = depth; i < g_max_depth; ++i) { cout << "\t"; }
+    if (move == white) { cout << "Best white move: "; }
+    else { cout << "Best black move: "; }
+    cout << best_move;
+    cout << endl << endl;
   #endif
   final_best_move = best_move;
   return max;

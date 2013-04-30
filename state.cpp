@@ -38,7 +38,7 @@ void State::create_board()
   board[5][4] = 'r';
 }
 
-void State::print_state()
+void State::print()
 {
   cout << round << " ";
   if (side_on_move == white) {
@@ -381,7 +381,7 @@ int State::evaluate(bool side)
         }
         case 'K':
         {
-          whitescore += 2000;
+          whitescore += 5000;
           break;
         }
         case 'p':
@@ -407,7 +407,7 @@ int State::evaluate(bool side)
         }
         case 'k':
         {
-          blackscore += 2000;
+          blackscore += 5000;
           break;
         }
         default:
@@ -422,6 +422,8 @@ int State::evaluate(bool side)
   }
   return blackscore - whitescore;
 }
+
+int g_max_depth;
 
 Move State::choose_move(vector<Move> & themoves) throw (int)
 {
@@ -444,7 +446,19 @@ Move State::choose_move(vector<Move> & themoves) throw (int)
       }
     } */
     //newmove = themoves[0];
-    negamax(*this, MAX_DEPTH, newmove);
+    int depth = 1;
+    int value;
+    g_max_depth = depth;
+    clock_t start = clock();
+    clock_t time_now = start;
+    while (time_now - start < MAX_TIME) {
+      // value = -100;
+      negamax(*this, depth, newmove);
+      ++depth;
+      g_max_depth = depth;
+      time_now = clock();
+    }
+    //negamax(*this, MAX_DEPTH, newmove);
     Move empty_move;
     if (newmove == empty_move) {
 //      srand(0);

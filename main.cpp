@@ -25,7 +25,7 @@ int main(int argc, char * argv[])
   Move move;
 
   cout << "Starting board" << endl;
-  board.print_state();
+  board.print();
   cout << endl;
   board.update_move_count(); // Display board at round 0, but once play commences we start at round 1
   int game_over = 2;
@@ -92,16 +92,22 @@ int bot_play(State & board, vector<Move> & themoves)
   }
   if (board.game_is_over()) return 0;
   board.update_side_on_move();
-  sleep(4);
-  //char tmp;
-  //cin >> tmp;
+  #ifdef DEBUG
+    cin.ignore();
+  #else
+    sleep(5);
+  #endif
   // Black move
   turn_value = bot_turn(board, themoves);
   if (turn_value == 0) {
     return turn_value;
   }
   board.update_side_on_move();
-  sleep(4);
+  #ifdef DEBUG
+    cin.ignore();
+  #else
+    sleep(5);
+  #endif
   //cin >> tmp;
   return 1;
 }
@@ -130,7 +136,7 @@ int human_turn(State & board, vector<Move> & themoves)
       exit(1);
     }
   }
-  board.print_state();
+  board.print();
   cout << endl;
   return 2; // exit normally
 }
@@ -157,7 +163,7 @@ int bot_turn(State & board, vector<Move> & themoves)
       return 0;
     }
     board = board.make_move(move);
-    board.print_state();
+    board.print();
     cout << endl << endl;
   }
   else {
