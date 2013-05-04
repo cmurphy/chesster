@@ -1,3 +1,6 @@
+#ifndef HEADER_H
+#define HEADER_H
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -22,6 +25,10 @@ extern int g_max_depth;
 
 void swap(int & x, int & y);
 bool move_is_valid(string move);
+//FILE * connect_host(char * hostname, int port);
+//char * get_response(FILE * socket_handle);
+//void send_command(FILE * socket_handle, char * command);
+//void init_game();
 
 class Square
 {
@@ -29,6 +36,7 @@ class Square
     Square();
     Square(int x, int y);
     void print();
+    char * to_s();
     bool operator==(const Square & othersquare);
     friend ostream & operator<<(ostream & out, const Square & asquare);
     void getxy(int & x, int & y);
@@ -45,7 +53,9 @@ class Move
   public:
     Move();
     Move(int x0, int y0, int xn, int yn);
+    Move(char * movestring);
     void print();
+    char * to_s();
     Square get_to_square();
     Square get_from_square();
     bool operator==(const Move & newmove);
@@ -103,3 +113,6 @@ int human_play(State & board, vector<Move> & themoves);
 int bot_play(State & board, vector<Move> & themoves);
 int human_turn(State & board, vector<Move> & themoves);
 int bot_turn(State & board, vector<Move> & themoves);
+
+
+#endif

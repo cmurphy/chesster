@@ -9,7 +9,7 @@ State::State()
 void State::create_board()
 {
   side_on_move = white;
-  round = 0;
+  round = 1;
   // black pieces
   board[0][0] = 'R';
   board[0][1] = 'N';

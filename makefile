@@ -1,7 +1,7 @@
 all: a.out
 
-a.out: main.o square.o move.o state.o negamax.o utilities.o
-	g++ main.o square.o move.o state.o negamax.o utilities.o
+a.out: main.o square.o move.o state.o negamax.o utilities.o imcs.o player.o game.o
+	g++ main.o square.o move.o state.o negamax.o utilities.o imcs.o player.o game.o
 
 main.o: main.cpp
 	g++ -c -g main.cpp
@@ -20,3 +20,12 @@ negamax.o: negamax.cpp
 
 utilities.o: utilities.cpp
 	g++ -c -g utilities.cpp
+
+imcs.o: imcs.cpp
+	g++ -c -g imcs.cpp
+
+player.o: player.cpp
+	g++ -c -g player.cpp
+
+game.o: game.cpp
+	g++ -c -g game.cpp
