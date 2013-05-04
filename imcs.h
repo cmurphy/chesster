@@ -1,3 +1,6 @@
+#ifndef IMCS_H
+#define IMCS_H
+
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netdb.h>
@@ -21,3 +24,5 @@ class Imcs
     FILE * socket_fd;
     bool verbose;
 };
+
+#endif

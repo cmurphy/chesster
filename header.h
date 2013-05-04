@@ -11,7 +11,7 @@ using namespace std;
 #ifdef DEBUG
 #undef DEBUG
 #endif
-#define DEBUG
+//#define DEBUG
 
 const bool white = true;
 const bool black = false;
@@ -25,10 +25,6 @@ extern int g_max_depth;
 
 void swap(int & x, int & y);
 bool move_is_valid(string move);
-//FILE * connect_host(char * hostname, int port);
-//char * get_response(FILE * socket_handle);
-//void send_command(FILE * socket_handle, char * command);
-//void init_game();
 
 class Square
 {
@@ -60,12 +56,6 @@ class Move
     Square get_from_square();
     bool operator==(const Move & newmove);
     friend ostream & operator<<(ostream & out, const Move & amove);
-};
-
-struct negamax_ret
-{
-  int value;
-  Move best_move;
 };
 
 vector<Move> add_vector(vector<Move> moves, vector<Move> tempmoves);
@@ -103,7 +93,7 @@ class State
     void knight_move(int x, int y, vector<Move> & moves);
     void pawn_move(int x, int y, vector<Move> & moves, char piece);
     int evaluate(bool side);
-    Move choose_move(vector<Move> & themoves) throw (int);
+    Move choose_move() throw (int);
     bool is_final();
     bool on_move();
 };

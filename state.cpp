@@ -425,27 +425,14 @@ int State::evaluate(bool side)
 
 int g_max_depth;
 
-Move State::choose_move(vector<Move> & themoves) throw (int)
+Move State::choose_move() throw (int)
 {
+  vector<Move> themoves = moves_for_side();
   //TODO: On first move, computer always makes the same move. Change it up a bit.
   int size = themoves.size();
   State potential_state;
   Move newmove;
   if (size > 0) {
-  /*
-    potential_state = make_move(themoves[0]);
-    int tmpscore = potential_state.evaluate(!move);
-    int score = tmpscore;
-    newmove = themoves[0];
-    for (int i = 1; i < size; ++i) {
-      potential_state = this->make_move(themoves[i]);
-      tmpscore = potential_state.evaluate(!move);
-      if (tmpscore < score) {
-        score = tmpscore;
-        newmove = themoves[i];
-      }
-    } */
-    //newmove = themoves[0];
     int depth = 1;
     int value;
     g_max_depth = depth;
@@ -458,11 +445,8 @@ Move State::choose_move(vector<Move> & themoves) throw (int)
       g_max_depth = depth;
       time_now = clock();
     }
-    //negamax(*this, MAX_DEPTH, newmove);
     Move empty_move;
     if (newmove == empty_move) {
-//      srand(0);
-//      newmove = themoves[rand() % themoves.size()];
         newmove = themoves[0];
     }
   }
@@ -471,6 +455,8 @@ Move State::choose_move(vector<Move> & themoves) throw (int)
   }
   return newmove;
 }
+
+
 
 bool State::is_final()
 {

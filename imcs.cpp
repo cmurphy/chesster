@@ -103,12 +103,18 @@ void Imcs::offer(char color)
   get();
 }
 
+
+
 void Imcs::game_start()
 {
+  //TODO: error checking, make sure these are getting what we expect
   get();
   get();
 }
 
+
+
+// TODO: make this work
 void Imcs::join(int game_id)
 {
 }
@@ -116,6 +122,7 @@ void Imcs::join(int game_id)
 
 void Imcs::make_move(Move local_move)
 {
+  // Assumes error checking before function call
   send(local_move.to_s());
 }
 
