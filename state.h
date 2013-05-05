@@ -22,25 +22,22 @@ class State
     void create_board();
     void print();
     void read_state(char newboard[BOARD_SIZE_Y][BOARD_SIZE_X]);
-    bool square_is_empty(int x, int y);
-    bool piece_is_capturable(int x, int y, bool color);
-    bool move_start_is_valid(int x0, int y0);
     vector<Move> move_gen(int x0, int y0, int dx, int dy, bool stop_short, bool capture);
     vector<Move> move_list(int x0, int y0);
     vector<Move> moves_for_side();
     void update_move_count();
     void update_side_on_move();
+    bool on_move();
     State make_move(Move move);
     State human_move(string move, vector<Move> & themoves) throw (int);
     bool game_is_over();
+    bool is_final();
     void king_queen_move(int x, int y, vector<Move> & moves, char piece);
     void bishop_rook_move(int x, int y, vector<Move> & moves, char piece);
     void knight_move(int x, int y, vector<Move> & moves);
     void pawn_move(int x, int y, vector<Move> & moves, char piece);
     int evaluate(bool side);
     Move choose_move() throw (int);
-    bool is_final();
-    bool on_move();
 };
 
 #endif

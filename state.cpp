@@ -66,29 +66,13 @@ void State::read_state(char newboard[BOARD_SIZE_Y][BOARD_SIZE_X])
   }
 }
 
+
 bool State::on_move()
 {
   return side_on_move;
 }
 
-bool State::square_is_empty(int x, int y)
-{
-  return board[y][x] == '.';
-}
 
-bool State::piece_is_capturable(int x, int y, bool color)
-{
-  if(color == white) {
-    return piece_is_color(board[y][x], black);
-  } else {
-    return piece_is_color(board[y][x], white);
-  }
-}
-
-bool State::move_start_is_valid(int x0, int y0)
-{
-  return (board[y0][x0] != '.' && piece_is_color(board[y0][x0], side_on_move));
-}
 
 vector<Move> State::move_gen(int x0, int y0, int dx, int dy, bool stop_short = false, bool capture = true)
 {
@@ -102,7 +86,7 @@ vector<Move> State::move_gen(int x0, int y0, int dx, int dy, bool stop_short = f
     if (x < 0 || x >= BOARD_SIZE_X || y < 0 || y >= BOARD_SIZE_Y) {
       break;
     }
-    if (!square_is_empty(x, y)) {
+    if (!square_is_empty(board[y][x])) {
       if (piece_is_color(board[y][x], color)) {
         break;
       }
@@ -193,7 +177,7 @@ State State::make_move(Move newmove)
   to.getxy(tox, toy);
   State newstate; //TODO: test copy constructor
   try {
-    if (move_start_is_valid(fromx, fromy)) {
+    if (move_start_is_valid(board[fromy][fromx], side_on_move)) {
       newstate.read_state(this->board);
       if (toupper(board[toy][tox]) == 'K') {
         newstate.game_over = true;
@@ -317,7 +301,7 @@ void State::pawn_move(int x, int y, vector<Move> & moves, char piece)
   if (tempmoves.size() == 1) {
     tosquare = tempmoves[0].get_to_square();
     tosquare.getxy(tox, toy);
-    if (piece_is_capturable(tox, toy, (piece == 'P'))) {
+    if (piece_is_capturable(board[toy][tox], (piece == 'P'))) {
       moves = add_vector(moves, tempmoves);
     }
   }
@@ -325,7 +309,7 @@ void State::pawn_move(int x, int y, vector<Move> & moves, char piece)
   if (tempmoves.size() == 1) {
     tosquare = tempmoves[0].get_to_square();
     tosquare.getxy(tox, toy);
-    if (piece_is_capturable(tox, toy, (piece == 'P'))) {
+    if (piece_is_capturable(board[toy][tox], (piece == 'P'))) {
       moves = add_vector(moves, tempmoves);
     }
   }

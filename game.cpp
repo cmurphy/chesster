@@ -43,6 +43,7 @@ void Game::play()
       cout << "Received move " << remote_move << endl;
       *board = board->make_move(remote_move); 
       board->update_side_on_move();
+      board->update_move_count();
     }
     else {
       Move remote_move = server->get_move(); 
