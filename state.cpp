@@ -22,7 +22,6 @@ void State::create_board()
   // black pawns
   for (int i = 0; i < 5; ++i) { board[1][i] = 'P'; }
   // blanks
-//  for (int i = 0; i < 5; ++i) { board[1][i] = '.'; }
   for (int i = 2; i < 4; ++i) {
     for (int j = 0; j < 5; ++j) {
       board[i][j] = '.';
@@ -31,8 +30,6 @@ void State::create_board()
 
  // white pawns
   for (int i = 0; i < 5; ++i) { board[4][i] = 'p'; }
-  // testing
-//  for (int i = 0; i < 5; ++i) { board[4][i] = '.'; }
   // white pieces
   board[5][0] = 'k';
   board[5][1] = 'q';
@@ -109,39 +106,44 @@ vector<Move> State::move_list(int x, int y)
   vector<Move> moves, tempmoves;
   bool stop_short = false;
   bool capture = true;
-  switch (piece) {
-    case 'q':
-    case 'k':
-    case 'Q':
-    case 'K':
-    {
-      king_queen_move(x, y, moves, piece);
-      break;
-    }
-    case 'r':
-    case 'b':
-    case 'R':
-    case 'B':
-    {
-      bishop_rook_move(x, y, moves, piece);
-      break;
-    }
-    case 'n':
-    case 'N':
-    {
-      knight_move(x, y, moves);
-      break;
-    }
-    case 'p':
-    case 'P':
-    {
-          pawn_move(x, y, moves, piece);
-          break;
-    }
-    default:
-      // should probably throw an exception
-      cout << "fail" << endl;
-  } 
+  try {
+    switch (piece) {
+      case 'q':
+      case 'k':
+      case 'Q':
+      case 'K':
+      {
+        king_queen_move(x, y, moves, piece);
+        break;
+      }
+      case 'r':
+      case 'b':
+      case 'R':
+      case 'B':
+      {
+        bishop_rook_move(x, y, moves, piece);
+        break;
+      }
+      case 'n':
+      case 'N':
+      {
+        knight_move(x, y, moves);
+        break;
+      }
+      case 'p':
+      case 'P':
+      {
+            pawn_move(x, y, moves, piece);
+            break;
+      }
+      default:
+        // fail
+        throw 1;
+    } 
+  } catch (int e) {
+    perror("Tried to add a move for a nonexistent piece.");
+    exit(1);
+  }
   return moves;
 }
 
@@ -175,7 +177,7 @@ State State::make_move(Move newmove)
   int fromx, fromy, tox, toy;
   from.getxy(fromx, fromy);
   to.getxy(tox, toy);
-  State newstate; //TODO: test copy constructor
+  State newstate; 
   try {
     if (move_start_is_valid(board[fromy][fromx], side_on_move)) {
       newstate.read_state(this->board);
@@ -226,7 +228,6 @@ State State::human_move(string move, vector<Move> & themoves) throw (int)
   }
 }
 
-// Scans the board looking for a king or if 40 moves have been played
 bool State::game_is_over()
 {
   if (round >= 40) {
@@ -407,7 +408,6 @@ Move State::choose_move() throw (int)
     clock_t start = clock();
     clock_t time_now = start;
     while (time_now - start < MAX_TIME) {
-      // value = -100;
       negamax(*this, depth, newmove);
       ++depth;
       g_max_depth = depth;

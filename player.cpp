@@ -14,7 +14,6 @@ bool Player::get_color()
 
 Move Player::choose_move(State current)
 {
-//  Move move(1, 0, 2, 2);
   try {
     Move move = current.choose_move();
     return move;

@@ -47,7 +47,6 @@ int negamax(State current_state, int depth, Move & final_best_move)
       } 
     #endif
     value = -(negamax(potential_state, depth - 1, final_best_move));
-    //cout << value << endl;
     if (value > max) {
       max = value;
       best_move = next_move;
