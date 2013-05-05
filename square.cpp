@@ -1,4 +1,4 @@
-#include "header.h"
+#include "square.h"
 
 Square::Square()
 {

@@ -1,7 +1,8 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#include "header.h"
+class Move;
+class State;
 
 class Player
 {

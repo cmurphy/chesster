@@ -4,7 +4,9 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <netdb.h>
-#include "header.h"
+#include <iostream>
+
+class Move;
 
 class Imcs
 {

@@ -1,4 +1,8 @@
 #include "game.h"
+#include "player.h"
+#include "state.h"
+#include "imcs.h"
+#include "move.h"
 
 
 Game::Game(bool player_color)

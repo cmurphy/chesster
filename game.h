@@ -1,6 +1,9 @@
-#include "header.h"
-#include "imcs.h"
-#include "player.h"
+#ifndef GAME_H
+#define GAME_H
+
+class State;
+class Imcs;
+class Player;
 
 class Game
 {
@@ -13,3 +16,5 @@ class Game
     Imcs * server;
     Player * player;
 };
+
+#endif

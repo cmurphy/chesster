@@ -1,4 +1,6 @@
+#include "state.h"
 #include "header.h"
+#include "move.h"
 
 State::State()
 {

@@ -1,4 +1,6 @@
 #include "imcs.h"
+#include "header.h"
+#include "move.h"
 
 static char buffer[1024];
 

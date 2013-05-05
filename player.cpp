@@ -1,4 +1,6 @@
 #include "player.h"
+#include "state.h"
+#include "move.h"
 
 Player::Player(bool color)
 {
