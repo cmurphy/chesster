@@ -1,6 +1,7 @@
 #include "state.h"
 #include "header.h"
 #include "move.h"
+#include "piece.h"
 
 State::State()
 {
@@ -75,6 +76,7 @@ bool State::square_is_empty(int x, int y)
   return board[y][x] == '.';
 }
 
+/*
 bool State::piece_is_white(int x, int y)
 {
   return board[y][x] >= 'B' && board[y][x] <= 'R';
@@ -93,26 +95,26 @@ bool State::piece_is_color(int x, int y, bool color)
     return piece_is_black(x, y);
   }
 } 
-
+*/
 bool State::piece_is_capturable(int x, int y, bool color)
 {
   if(color == white) {
-    return piece_is_black(x, y);
+    return piece_is_color(board[y][x], black);
   } else {
-    return piece_is_white(x, y);
+    return piece_is_color(board[y][x], white);
   }
 }
 
 bool State::move_start_is_valid(int x0, int y0)
 {
-  return (board[y0][x0] != '.' && piece_is_color(x0, y0, side_on_move));
+  return (board[y0][x0] != '.' && piece_is_color(board[y0][x0], side_on_move));
 }
 
 vector<Move> State::move_gen(int x0, int y0, int dx, int dy, bool stop_short = false, bool capture = true)
 {
   int x = x0;
   int y = y0;
-  bool color = piece_is_white(x, y);
+  bool color = piece_is_color(board[y][x], white);
   vector<Move> moves;
   do {
     x += dx;
@@ -121,7 +123,7 @@ vector<Move> State::move_gen(int x0, int y0, int dx, int dy, bool stop_short = f
       break;
     }
     if (!square_is_empty(x, y)) {
-      if (piece_is_color(x, y, color)) {
+      if (piece_is_color(board[y][x], color)) {
         break;
       }
       if (!capture) {
@@ -184,7 +186,7 @@ vector<Move> State::moves_for_side()
   vector<Move> themoves;
   for (int i = 0; i < BOARD_SIZE_X; ++i) {
     for (int j = 0; j < BOARD_SIZE_Y; ++j) {
-      if (board[j][i] != '.' && piece_is_color(i, j, side_on_move)) {
+      if (board[j][i] != '.' && piece_is_color(board[j][i], side_on_move)) {
         themoves = add_vector(themoves, move_list(i, j));
       }
     }
