@@ -93,7 +93,7 @@ void Imcs::signin(char * username, char * password)
 {
   sprintf(buffer, "me %s %s", username, password);
   send(buffer);
-  get(); //server sends "hello chesster"
+  get(); //server sends "hello chesster" TODO: validity check
 }
 
 
@@ -102,7 +102,7 @@ void Imcs::offer(char color)
 {
   sprintf(buffer, "offer %c", color);
   send(buffer);
-  get();
+  get(); // error checking
 }
 
 
@@ -142,6 +142,9 @@ Move Imcs::get_move()
   }
   Move remote_move = Move(stringmove);
   remote_move.print();
+  get();
+  get();
+  // Flush board state returned by server
   return remote_move;
 }
 

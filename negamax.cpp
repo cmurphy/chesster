@@ -5,6 +5,8 @@
 // randomization to make better moves. Also make better evaluator.
 
 #include "header.h"
+#include "state.h"
+#include "move.h"
 
 int negamax(State current_state, int depth, Move & final_best_move)
 {
