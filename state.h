@@ -23,9 +23,6 @@ class State
     void print();
     void read_state(char newboard[BOARD_SIZE_Y][BOARD_SIZE_X]);
     bool square_is_empty(int x, int y);
-    //bool piece_is_white(int x, int y);
-    //bool piece_is_black(int x, int y);
-    //bool piece_is_color(int x, int y, bool color);
     bool piece_is_capturable(int x, int y, bool color);
     bool move_start_is_valid(int x0, int y0);
     vector<Move> move_gen(int x0, int y0, int dx, int dy, bool stop_short, bool capture);

@@ -76,26 +76,6 @@ bool State::square_is_empty(int x, int y)
   return board[y][x] == '.';
 }
 
-/*
-bool State::piece_is_white(int x, int y)
-{
-  return board[y][x] >= 'B' && board[y][x] <= 'R';
-}
-
-bool State::piece_is_black(int x, int y)
-{
-  return board[y][x] >= 'b' && board[y][x] <= 'r';
-}
-
-bool State::piece_is_color(int x, int y, bool color)
-{
-  if (color == white) {
-    return piece_is_white(x, y);
-  } else {
-    return piece_is_black(x, y);
-  }
-} 
-*/
 bool State::piece_is_capturable(int x, int y, bool color)
 {
   if(color == white) {
