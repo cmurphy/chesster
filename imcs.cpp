@@ -6,9 +6,9 @@ static char buffer[1024];
 
 
 
-Imcs::Imcs()
+Imcs::Imcs(bool verbose)
 {
-  verbose = true;
+  this->verbose = verbose;
   char hostname[] = "imcs.svcs.cs.pdx.edu";
   int port = 3589;
   char username[] = "chesster";
@@ -102,15 +102,18 @@ void Imcs::offer(char color)
 {
   sprintf(buffer, "offer %c", color);
   send(buffer);
+  cout << "getting offer response" << endl;
   get(); // error checking
 }
 
 
 
-void Imcs::game_start()
+void Imcs::game_start(char player_color)
 {
   //TODO: error checking, make sure these are getting what we expect
-  get();
+  if (player_color == 'B') {
+    get();
+  }
   get();
 }
 
@@ -131,10 +134,18 @@ void Imcs::make_move(Move local_move)
 Move Imcs::get_move()
 {
   char * imcs_move = get();
+  cout << "got a move" << imcs_move << "|" << endl;
   (void) strtok(imcs_move, " ");
+  cout << "strtok1" << endl;
   char * stringmove = strtok(NULL, "\n");
-  char * valid_move = new char[strlen(stringmove)];
+  cout << "strtok2" << endl;
+  cout << stringmove << endl;
+  int len = strlen(stringmove);
+  cout << "strlen" << endl;
+  char * valid_move = new char[len];
+  cout << "new" << endl;
   strncpy(valid_move, stringmove, strlen(stringmove) - 1);
+  cout << "strncpy" << endl;
   if (!move_is_valid(valid_move)) {
     cout << stringmove << endl;
     perror("received invalid string for move");
@@ -146,6 +157,18 @@ Move Imcs::get_move()
   get();
   // Flush board state returned by server
   return remote_move;
+}
+
+void Imcs::get_board()
+{
+  get();
+  get();
+  get();
+  get();
+  get();
+  get();
+  get();
+  get();
 }
 
 // private

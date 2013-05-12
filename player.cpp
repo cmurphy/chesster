@@ -2,12 +2,12 @@
 #include "state.h"
 #include "move.h"
 
-Player::Player(bool color)
+Player::Player(char color)
 {
   this->color = color;
 }
 
-bool Player::get_color()
+char Player::get_color()
 {
   return color;
 }

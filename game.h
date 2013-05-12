@@ -8,7 +8,7 @@ class Player;
 class Game
 {
   public:
-    Game(bool color);
+    Game(char color, bool verbose);
     ~Game();
     void play();
   private:

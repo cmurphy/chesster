@@ -5,7 +5,13 @@
 
 int main(int argc, char ** argv)
 {
-  Game game(white);
+  bool verbose = false;
+  if (argc > 1) {
+    if (!strcmp(argv[1], "-v")) {
+      verbose = true;
+    }
+  }
+  Game game('W', verbose);
   game.play();
   return 0;
 }

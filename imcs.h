@@ -11,7 +11,7 @@ class Move;
 class Imcs
 {
   public:
-    Imcs();
+    Imcs(bool verbose);
     ~Imcs();
     void imcs_connect(char * hostname, int port);
     void signin(char * username, char * password);
@@ -19,7 +19,8 @@ class Imcs
     void join(int game_id);
     void make_move(Move local_move);
     Move get_move();
-    void game_start();
+    void get_board();
+    void game_start(char player_color);
   private:
     void send(char * command);
     char * get();

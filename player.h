@@ -7,11 +7,11 @@ class State;
 class Player
 {
   public:
-    Player(bool color);
+    Player(char color);
     Move choose_move(State current);
-    bool get_color();
+    char get_color();
   private:
-    bool color;
+    char color;
 };
 
 #endif
