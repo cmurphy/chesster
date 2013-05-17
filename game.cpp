@@ -10,7 +10,7 @@ Game::Game(char player_color, bool verbose)
   player = new Player(player_color);
   board = new State;
   server = new Imcs(verbose);
-  server->offer('W');
+  server->offer(player_color);
 }
 
 
@@ -52,13 +52,17 @@ void Game::play()
       cout << "Waiting for move from server (black)" << endl;
       Move remote_move = server->get_move(); 
       cout << "Received move " << remote_move << endl;
+      server->get_board();
       *board = board->make_move(remote_move); 
+      board->update_side_on_move();
       if (board->game_is_over()) {
         break;
       }
       Move local_move = player->choose_move(*board);
       *board = board->make_move(local_move);
       server->make_move(local_move);
+      board->update_side_on_move();
+      board->update_move_count();
     }
   }
 }

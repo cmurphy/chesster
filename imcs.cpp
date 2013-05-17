@@ -104,6 +104,9 @@ void Imcs::offer(char color)
   send(buffer);
   cout << "getting offer response" << endl;
   get(); // error checking
+  if (color == 'B') {
+    get(); // get "game starts"
+  }
 }
 
 
@@ -112,9 +115,9 @@ void Imcs::game_start(char player_color)
 {
   //TODO: error checking, make sure these are getting what we expect
   if (player_color == 'B') {
-    get();
+    //get();
   }
-  get();
+  //get();
 }
 
 

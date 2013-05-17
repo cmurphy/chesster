@@ -11,7 +11,7 @@ int main(int argc, char ** argv)
       verbose = true;
     }
   }
-  Game game('W', verbose);
+  Game game('B', verbose);
   game.play();
   return 0;
 }
