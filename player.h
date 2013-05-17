@@ -10,6 +10,7 @@ class Player
     Player(char color);
     Move choose_move(State current);
     char get_color();
+    void set_color(char color);
   private:
     char color;
 };

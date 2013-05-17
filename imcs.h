@@ -20,7 +20,7 @@ class Imcs
     void make_move(Move local_move);
     Move get_move();
     void get_board();
-    void game_start(char player_color);
+    char game_start(char player_color);
   private:
     void send(char * command);
     char * get();

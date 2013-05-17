@@ -111,8 +111,14 @@ void Imcs::offer(char color)
 
 
 
-void Imcs::game_start(char player_color)
+char Imcs::game_start(char player_color)
 {
+  if (player_color == '?') {
+    char * color_string = get();
+    player_color = color_string[4];
+    cout << "got color " << player_color << endl;
+  }
+  return player_color;
   //TODO: error checking, make sure these are getting what we expect
   if (player_color == 'B') {
     //get();

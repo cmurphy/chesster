@@ -24,6 +24,7 @@ extern int g_max_depth;
 
 void swap(int & x, int & y);
 bool move_is_valid(string move);
+void usage();
 
 class Move;
 class State;

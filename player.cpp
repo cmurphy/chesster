@@ -12,6 +12,11 @@ char Player::get_color()
   return color;
 }
 
+void Player::set_color(char color)
+{
+  this->color = color;
+}
+
 Move Player::choose_move(State current)
 {
   try {
