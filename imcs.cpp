@@ -116,7 +116,6 @@ void Imcs::accept(int game, char color)
   sprintf(buffer, "accept %d %c", game, color);
   send(buffer);
   cout << "accepting game" << endl;
-  get();
 }
 
 
@@ -125,6 +124,10 @@ char Imcs::game_start(char player_color)
 {
   if (player_color == '?') {
     char * color_string = get();
+    if (!strncmp(color_string, "408 no such game", 16)) {
+      perror(color_string);
+      exit(1);
+    }
     player_color = color_string[4];
     cout << "got color " << player_color << endl;
   }
