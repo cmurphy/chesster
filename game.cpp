@@ -5,13 +5,15 @@
 #include "move.h"
 
 
-Game::Game(char player_color, bool verbose, bool offer)
+Game::Game(char player_color, bool verbose, bool offer, int game)
 {
   player = new Player(player_color);
   board = new State;
   server = new Imcs(verbose);
   if (offer) {
     server->offer(player_color);
+  } else {
+    server->accept(game, player_color);
   }
 }
 
@@ -30,7 +32,7 @@ void Game::play()
 {
   char self_color = player->get_color();
   cout << "self color" << self_color << endl;
-  cout << "Waiting for game to be accepted" << endl;
+//  cout << "Waiting for game to be accepted" << endl;
   self_color = server->game_start(self_color);
   player->set_color(self_color);
   while (!board->game_is_over()) {

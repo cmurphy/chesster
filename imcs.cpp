@@ -111,6 +111,16 @@ void Imcs::offer(char color)
 
 
 
+void Imcs::accept(int game, char color)
+{
+  sprintf(buffer, "accept %d %c", game, color);
+  send(buffer);
+  cout << "accepting game" << endl;
+  get();
+}
+
+
+
 char Imcs::game_start(char player_color)
 {
   if (player_color == '?') {
