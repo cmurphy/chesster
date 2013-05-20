@@ -18,7 +18,8 @@ const bool white = true;
 const bool black = false;
 const int MAX_MOVES = 40;
 const int MAX_DEPTH = 3;
-const int MAX_TIME = 10000;
+const int MAX_SEC = 1;
+const int MAX_TIME = MAX_SEC * CLOCKS_PER_SEC;
 
 extern int g_max_depth;
 
