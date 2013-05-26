@@ -8,18 +8,19 @@
 #include "state.h"
 #include "move.h"
 
-int negamax(State current_state, int depth, Move & final_best_move)
+int negamax(State current_state, int depth, Move & final_best_move, clock_t start_time, int & states_evaluated)
 {
   if (current_state.is_final() || depth <= 0) {
     int eval = current_state.evaluate(current_state.on_move());
     #ifdef DEBUG
       cout << eval << endl;
     #endif
+    ++states_evaluated;
     return eval;
   }
   vector<Move> moves = current_state.moves_for_side();
   Move next_move = moves[0];
-  Move best_move;
+  Move best_move = next_move;
   State potential_state = current_state.make_move(next_move);
   potential_state.update_side_on_move();
   #ifdef DEBUG
@@ -31,7 +32,13 @@ int negamax(State current_state, int depth, Move & final_best_move)
       cout << "<move-black " << next_move << ">";
     } 
   #endif
-  int max = -(negamax(potential_state, depth - 1, final_best_move));
+  int max = 0;
+  if (clock() - start_time < MAX_TIME) {
+    max = -(negamax(potential_state, depth - 1, final_best_move, start_time, states_evaluated));
+  } else {
+    final_best_move = best_move;
+    return current_state.evaluate(current_state.on_move());
+  }
   int value;
   int size = moves.size();
   for (int i = 1; i < size; ++i) {
@@ -46,7 +53,12 @@ int negamax(State current_state, int depth, Move & final_best_move)
         cout << "<move-black " << next_move << ">";
       } 
     #endif
-    value = -(negamax(potential_state, depth - 1, final_best_move));
+    if (clock() - start_time < MAX_TIME) {
+      value = -(negamax(potential_state, depth - 1, final_best_move, start_time, states_evaluated));
+    } else {
+      final_best_move = best_move;
+      return max;
+    }
     if (value > max) {
       max = value;
       best_move = next_move;

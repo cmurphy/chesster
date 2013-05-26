@@ -407,12 +407,15 @@ Move State::choose_move() throw (int)
     g_max_depth = depth;
     clock_t start = clock();
     clock_t time_now = start;
+    int states_evaluated = 0;
     while (time_now - start < MAX_TIME) {
-      negamax(*this, depth, newmove);
+      negamax(*this, depth, newmove, start, states_evaluated);
       ++depth;
       g_max_depth = depth;
       time_now = clock();
     }
+    cout << "time: " << (time_now - start) / CLOCKS_PER_SEC << "seconds" << endl;
+    cout << "states evaluated: " << states_evaluated << endl;
     Move empty_move;
     if (newmove == empty_move) {
         newmove = themoves[0];

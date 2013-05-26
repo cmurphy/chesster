@@ -1,4 +1,5 @@
 #include "header.h"
+#include "move.h"
 
 void swap(int & x, int & y)
 {

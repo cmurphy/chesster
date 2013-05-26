@@ -30,7 +30,7 @@ void usage();
 class Move;
 class State;
 
-int negamax(State current_state, int depth, Move & best_move);
+int negamax(State current_state, int depth, Move & best_move, clock_t start_time, int & states_evaluated);
 int human_play(State & board, vector<Move> & themoves);
 int bot_play(State & board, vector<Move> & themoves);
 int human_turn(State & board, vector<Move> & themoves);
