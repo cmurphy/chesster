@@ -2,6 +2,7 @@ all: a.out
 
 a.out: main.o square.o move.o state.o negamax.o utilities.o imcs.o player.o game.o piece.o header.h
 	g++ main.o square.o move.o state.o negamax.o utilities.o imcs.o player.o game.o piece.o
+	rm main.o square.o move.o state.o negamax.o utilities.o imcs.o player.o game.o piece.o
 
 main.o: main.cpp
 	g++ -c -g main.cpp
