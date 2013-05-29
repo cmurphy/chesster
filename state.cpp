@@ -408,18 +408,17 @@ Move State::choose_move() throw (int)
     g_max_depth = depth;
     clock_t start = clock();
     clock_t time_now = start;
-    int states_evaluated = 0;
+    int states_evaluated_total = 0;
     while (time_now - start < MAX_TIME) {
+      int states_evaluated_at_depth = 0;
       int i;
       value = -MAX_SCORE;
       alpha_0 = value;
       for (i = 0; i < size; ++i) {
         State potential_state = make_move(themoves[i]);
         potential_state.update_side_on_move();
-        int value_0 = max(value, -negamax(potential_state, depth, start, states_evaluated, -MAX_SCORE, -alpha_0));
+        int value_0 = max(value, -negamax(potential_state, depth, start, states_evaluated_at_depth, -MAX_SCORE, -alpha_0));
         alpha_0 = max(alpha_0, value_0);
-        cout << "old value: " << value << endl;
-        cout << "value 0: " << value_0 << endl;
         if (value_0 > value) {
           value = value_0;
           newmove = themoves[i];
@@ -431,9 +430,12 @@ Move State::choose_move() throw (int)
       ++depth;
       g_max_depth = depth;
       time_now = clock();
+      states_evaluated_total += states_evaluated_at_depth;
+      cout << "time at depth: " << (time_now - start) / CLOCKS_PER_SEC << "seconds and " << ((time_now - start) % CLOCKS_PER_SEC) / (CLOCKS_PER_SEC / 1000) << " milliseconds" << endl;
+      cout << "states evaluated at depth: " << states_evaluated_at_depth << endl;
     }
-    cout << "time: " << (time_now - start) / CLOCKS_PER_SEC << "seconds" << endl;
-    cout << "states evaluated: " << states_evaluated << endl;
+    cout << "time total: " << (time_now - start) / CLOCKS_PER_SEC << "seconds and " << ((time_now - start) % CLOCKS_PER_SEC)  / (CLOCKS_PER_SEC / 1000) << " milliseconds" << endl;
+    cout << "states evaluated total: " << states_evaluated_total << endl;
     Move empty_move;
     if (newmove == empty_move) {
         newmove = themoves[0];
