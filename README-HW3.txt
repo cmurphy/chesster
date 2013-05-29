@@ -31,3 +31,12 @@ the datastructure representing the board is not very complex. A 5x6 char
 array is not very complex for C++ to manipulate. If this had been implemented
 with a bit board do-undo would probably cause even more overhead and 
 be detrimental to performance.
+
+In the interest of time and since my bot already plays admirably I only
+made slight adjustments to the state evaluation. It favors moving the 
+knight, rook, and bishop out of the home row and keeping the king 
+in the home row. Since implementing do-undo these evaluations now take
+place in make_move and unmake_move instead of in the evaluate function.
+I added a new evaluate function that simply returns the state's saved
+score and will deprecate the old evaluation once everythign else is 
+completed.
