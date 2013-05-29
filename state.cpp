@@ -404,12 +404,22 @@ Move State::choose_move() throw (int)
   if (size > 0) {
     int depth = 1;
     int value;
+    int alpha_0;
     g_max_depth = depth;
     clock_t start = clock();
     clock_t time_now = start;
     int states_evaluated = 0;
     while (time_now - start < MAX_TIME) {
-      negamax(*this, depth, newmove, start, states_evaluated);
+      value = -MAX_SCORE;
+      alpha_0 = value;
+      for (int i = 0; i < size; ++i) {
+        int value_0 = max(value, -negamax(*this, depth, newmove, start, states_evaluated, -MAX_SCORE, -alpha_0));
+        alpha_0 = max(alpha_0, value_0);
+        if (value_0 > value) {
+          newmove = themoves[i];
+        }
+        value = max(value, value_0);
+      }
       ++depth;
       g_max_depth = depth;
       time_now = clock();

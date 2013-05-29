@@ -158,16 +158,11 @@ Move Imcs::get_move()
   char * imcs_move = get();
   cout << "got a move" << imcs_move << "|" << endl;
   (void) strtok(imcs_move, " ");
-  cout << "strtok1" << endl;
   char * stringmove = strtok(NULL, "\n");
-  cout << "strtok2" << endl;
   cout << stringmove << endl;
   int len = strlen(stringmove);
-  cout << "strlen" << endl;
   char * valid_move = new char[len];
-  cout << "new" << endl;
   strncpy(valid_move, stringmove, strlen(stringmove) - 1);
-  cout << "strncpy" << endl;
   if (!move_is_valid(valid_move)) {
     cout << stringmove << endl;
     perror("received invalid string for move");
