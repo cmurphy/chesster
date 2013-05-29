@@ -38,6 +38,7 @@ class State
     void bishop_rook_move(int x, int y, vector<Move> & moves, char piece);
     void knight_move(int x, int y, vector<Move> & moves);
     void pawn_move(int x, int y, vector<Move> & moves, char piece);
+    int evaluate();
     int evaluate(bool side);
     Move choose_move() throw (int);
 };

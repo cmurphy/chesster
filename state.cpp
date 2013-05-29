@@ -197,6 +197,18 @@ char State::make_move(Move newmove)
         board[toy][tox] = 'Q';
         state_value = state_value + QUEEN_VAL - PAWN_VAL;
       }
+      if ((piece == 'n' || piece == 'r' || piece == 'b') && ((fromy >= 4) && (toy < 4))) {
+        state_value += 50;
+      }
+      if ((piece == 'N' || piece == 'R' || piece == 'B') && ((fromy >= 4) && (toy > 1))) {
+        state_value += 50;
+      }
+			if (piece == 'k' && (toy != 5 && fromy == 5)) {
+        state_value -= 50;
+      }
+      if (piece == 'K' && (toy != 0 && fromy == 0)) {
+        state_value -= 50;
+      }
     } else {
       int e = 1;
       throw e;
@@ -225,6 +237,18 @@ void State::unmake_move(Move oldmove, char captured)
   }
   if (piece == 'P' && toy == 5) {
     state_value = state_value - (QUEEN_VAL - PAWN_VAL);
+  }
+  if ((piece == 'n' || piece == 'r' || piece == 'b') && ((fromy >= 4) && (toy < 4))) {
+    state_value -= 50;
+  }
+  if ((piece == 'N' || piece == 'R' || piece == 'B') && ((fromy >= 4) && (toy > 1))) {
+    state_value -= 50;
+  }
+	if (piece == 'k' && (toy != 5 && fromy == 5)) {
+    state_value += 50;
+  }
+  if (piece == 'K' && (toy != 0 && fromy == 0)) {
+    state_value += 50;
   }
 }
 
@@ -341,6 +365,11 @@ void State::pawn_move(int x, int y, vector<Move> & moves, char piece)
   bool capture = false;
   tempmoves = move_gen(x, y, 0, dir, stop_short, capture);
   moves = add_vector(moves, tempmoves);
+}
+
+int State::evaluate()
+{
+  return state_value;
 }
 
 int State::evaluate(bool side)

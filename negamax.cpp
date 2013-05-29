@@ -11,7 +11,8 @@
 int negamax(State current_state, int depth, clock_t start_time, int & states_evaluated, int alpha, int beta)
 {
   if (current_state.is_final() || depth <= 0) {
-    int eval = current_state.evaluate(current_state.on_move());
+//    int eval = current_state.evaluate(current_state.on_move());
+    int eval = current_state.evaluate();
     #ifdef DEBUG
       cout << eval << endl;
     #endif
