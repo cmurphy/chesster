@@ -22,6 +22,7 @@ deep.
 
 After implementing alpha-beta pruning, it still only evaluates 5-6 levels,
 but not only evaluates 50,000 to 200,000 states and only takes 1-7 seconds.
+If my timekeeping was more strict, this would be a significant improvement.
 
 Implementing do-undo (after alpha-beta) did not significantly affect the 
 number of states evaluated nor the depth of evaluation. There is some
