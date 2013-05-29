@@ -16,6 +16,7 @@ class State
     int round;
     char board[BOARD_SIZE_Y][BOARD_SIZE_X];
     bool game_over;
+    int state_value;
 
   public:
     State(); 
@@ -28,8 +29,9 @@ class State
     void update_move_count();
     void update_side_on_move();
     bool on_move();
-    State make_move(Move move);
-    State human_move(string move, vector<Move> & themoves) throw (int);
+    char make_move(Move move);
+    void unmake_move(Move move, char captured);
+    //State human_move(string move, vector<Move> & themoves) throw (int);
     bool game_is_over();
     bool is_final();
     void king_queen_move(int x, int y, vector<Move> & moves, char piece);

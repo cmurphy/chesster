@@ -7,6 +7,7 @@ State::State()
 {
   create_board();
   game_over = false;
+  state_value = 0;
 }
 
 void State::create_board()
@@ -168,43 +169,66 @@ void State::update_move_count()
 void State::update_side_on_move()
 {
   side_on_move = !side_on_move;
+  state_value = -state_value;
 }
 
-State State::make_move(Move newmove)
+char State::make_move(Move newmove)
 {
   Square from = newmove.get_from_square();
   Square to = newmove.get_to_square();
   int fromx, fromy, tox, toy;
   from.getxy(fromx, fromy);
   to.getxy(tox, toy);
-  State newstate; 
+  char captured;
   try {
     if (move_start_is_valid(board[fromy][fromx], side_on_move)) {
-      newstate.read_state(this->board);
       if (toupper(board[toy][tox]) == 'K') {
-        newstate.game_over = true;
+        game_over = true;
       }
-      char piece = newstate.board[fromy][fromx];
-      newstate.board[fromy][fromx] = '.';
-      newstate.board[toy][tox] = piece;
-      newstate.round = round;
-      newstate.side_on_move = side_on_move; // will be updated after move is made
+      char piece = board[fromy][fromx];
+      board[fromy][fromx] = '.';
+      captured = board[toy][tox];
+      board[toy][tox] = piece;
       if (piece == 'p' && toy == 0) {
-        newstate.board[toy][tox] = 'q';
+        board[toy][tox] = 'q';
+        state_value = state_value + QUEEN_VAL - PAWN_VAL;
       }
       if (piece == 'P' && toy == 5) {
-        newstate.board[toy][tox] = 'Q';
+        board[toy][tox] = 'Q';
+        state_value = state_value + QUEEN_VAL - PAWN_VAL;
       }
     } else {
       int e = 1;
       throw e;
     }
   } catch (int e) {
-    cout << "Not a valid move.\n";
+    cout << "Not a valid move" << newmove << endl;
   }
-  return newstate;
+  state_value += piece_value(captured);
+  return captured; //could return '.'
 }
 
+void State::unmake_move(Move oldmove, char captured)
+{
+  Square from = oldmove.get_from_square();
+  Square to = oldmove.get_to_square();
+  int fromx, fromy, tox, toy;
+  from.getxy(fromx, fromy);
+  to.getxy(tox, toy);
+
+  char piece = board[toy][tox];
+  board[fromy][fromx] = piece;
+  board[toy][tox] = captured;
+  state_value -= captured;
+  if (piece == 'p' && toy == 0) {
+    state_value = state_value - (QUEEN_VAL - PAWN_VAL);
+  }
+  if (piece == 'P' && toy == 5) {
+    state_value = state_value - (QUEEN_VAL - PAWN_VAL);
+  }
+}
+
+/*
 State State::human_move(string move, vector<Move> & themoves) throw (int)
 {
   if (!move_is_valid(move)) { // only checks for validity of string, should check for validity of move
@@ -227,7 +251,7 @@ State State::human_move(string move, vector<Move> & themoves) throw (int)
     }
   }
 }
-
+*/
 bool State::game_is_over()
 {
   if (round >= 40) {
@@ -329,54 +353,54 @@ int State::evaluate(bool side)
       switch(piece) {
         case 'P':
         {
-          whitescore += 100;
+          whitescore += PAWN_VAL;
           break;
         }
         case 'B':
         case 'N':
         {
-          whitescore += 300;
+          whitescore += BISHOP_VAL;
           break;
         }
         case 'R':
         {
-          whitescore += 500;
+          whitescore += ROOK_VAL;
           break;
         }
         case 'Q':
         {
-          whitescore += 1000;
+          whitescore += QUEEN_VAL;
           break;
         }
         case 'K':
         {
-          whitescore += 5000;
+          whitescore += KING_VAL;
           break;
         }
         case 'p':
         {
-          blackscore += 100;
+          blackscore += PAWN_VAL;
           break;
         }
         case 'b':
         case 'n':
         {
-          blackscore += 300;
+          blackscore += BISHOP_VAL;
           break;
         }
         case 'r':
         {
-          blackscore += 500;
+          blackscore += ROOK_VAL;
           break;
         }
         case 'q':
         {
-          blackscore += 1000;
+          blackscore += QUEEN_VAL;
           break;
         }
         case 'k':
         {
-          blackscore += 5000;
+          blackscore += KING_VAL;
           break;
         }
         default:
@@ -415,9 +439,11 @@ Move State::choose_move() throw (int)
       value = -MAX_SCORE;
       alpha_0 = value;
       for (i = 0; i < size; ++i) {
-        State potential_state = make_move(themoves[i]);
-        potential_state.update_side_on_move();
-        int value_0 = max(value, -negamax(potential_state, depth, start, states_evaluated_at_depth, -MAX_SCORE, -alpha_0));
+        char captured = make_move(themoves[i]);
+        update_side_on_move();
+        int value_0 = max(value, -negamax(*this, depth, start, states_evaluated_at_depth, -MAX_SCORE, -alpha_0));
+        unmake_move(themoves[i], captured);
+        update_side_on_move();
         alpha_0 = max(alpha_0, value_0);
         if (value_0 > value) {
           value = value_0;

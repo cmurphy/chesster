@@ -22,13 +22,15 @@ int negamax(State current_state, int depth, clock_t start_time, int & states_eva
   int alpha_0 = alpha;
   Move next_move;
   Move best_move;
-  State potential_state;
   vector<Move> moves = current_state.moves_for_side();
   int size = moves.size();
+  #ifdef DEBUG
+    State potential_state = current_state;
+  #endif
   for (int i = 0; i < size; ++i) {
     next_move = moves[i];
-    potential_state = current_state.make_move(next_move);
-    potential_state.update_side_on_move();
+    char captured = current_state.make_move(next_move);
+    current_state.update_side_on_move();
     #ifdef DEBUG
       for (int i = depth; i < g_max_depth; ++i) { cout << "\t"; }
       if (current_state.on_move() == white) {
@@ -43,8 +45,10 @@ int negamax(State current_state, int depth, clock_t start_time, int & states_eva
           cout << endl;
         }
       #endif
-      value = max(value, -(negamax(potential_state, depth - 1, start_time, states_evaluated, -beta, -alpha_0)));
+      value = max(value, -(negamax(current_state, depth - 1, start_time, states_evaluated, -beta, -alpha_0)));
       alpha_0 = max(alpha_0, value);
+      current_state.unmake_move(next_move, captured);
+      current_state.update_side_on_move();
       if (value >= beta) {
         best_move = next_move;
         return value;
@@ -59,13 +63,13 @@ int negamax(State current_state, int depth, clock_t start_time, int & states_eva
     //}
   }
   #ifdef DEBUG
-    bool move = current_state.on_move();
+    bool move = potential_state.on_move();
     cout << endl;
     for (int i = depth; i < g_max_depth; ++i) { cout << "\t"; }
     cout << "Potential state before best move at this level: " << endl;
     cout << "------------------------------------------------" << endl;
     cout << "Level: " << depth << endl;
-    current_state.print();
+    potential_state.print();
     cout << "------------------------------------------------" << endl;
     cout << endl;
     for (int i = depth; i < g_max_depth; ++i) { cout << "\t"; }

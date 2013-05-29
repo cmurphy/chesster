@@ -39,7 +39,7 @@ void Game::play()
     if (player->get_color() == 'W') { //If white, go first
       server->get_board();
       Move local_move = player->choose_move(*board);
-      *board = board->make_move(local_move);
+      board->make_move(local_move);
       cout << "Sending move to server (white)" << endl;
       server->make_move(local_move);
       if (board->game_is_over()) {
@@ -49,7 +49,7 @@ void Game::play()
       cout << "Waiting for move from server (white)" << endl;
       Move remote_move = server->get_move(); // TODO: error checking for legality of remote move
       cout << "Received move " << remote_move << endl;
-      *board = board->make_move(remote_move); 
+      board->make_move(remote_move); 
       board->update_side_on_move();
       board->update_move_count();
     }
@@ -58,13 +58,13 @@ void Game::play()
       Move remote_move = server->get_move(); 
       cout << "Received move " << remote_move << endl;
       server->get_board();
-      *board = board->make_move(remote_move); 
+      board->make_move(remote_move); 
       board->update_side_on_move();
       if (board->game_is_over()) {
         break;
       }
       Move local_move = player->choose_move(*board);
-      *board = board->make_move(local_move);
+      board->make_move(local_move);
       server->make_move(local_move);
       board->update_side_on_move();
       board->update_move_count();

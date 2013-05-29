@@ -55,3 +55,28 @@ void usage()
        << "-v -- verbose"
        << "-o -- offer, optional with color (W or B)";
 }
+
+int piece_value(char piece)
+{
+  switch(tolower(piece))
+  {
+    case '.':
+      return 0;
+    case 'p':
+      return PAWN_VAL;
+    case 'b':
+      return BISHOP_VAL;
+    case 'n':
+      return KNIGHT_VAL;
+    case 'r':
+      return ROOK_VAL;
+    case 'q':
+      return QUEEN_VAL;
+    case 'k':
+      return KING_VAL;
+    default:
+      cout << "piece: " << piece;
+      perror("Not a valid piece");
+      exit(1);
+  }
+}

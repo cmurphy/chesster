@@ -12,7 +12,7 @@ using namespace std;
 #ifdef DEBUG
 #undef DEBUG
 #endif
-#define DEBUG
+//#define DEBUG
 
 const bool white = true;
 const bool black = false;
@@ -22,11 +22,20 @@ const int MAX_SEC = 1;
 const int MAX_TIME = MAX_SEC * CLOCKS_PER_SEC;
 const int MAX_SCORE = 9600;
 
+/* Piece values */
+const int PAWN_VAL = 100;
+const int BISHOP_VAL = 300;
+const int KNIGHT_VAL = BISHOP_VAL;
+const int ROOK_VAL = 500;
+const int QUEEN_VAL = 1000;
+const int KING_VAL = 5000;
+
 extern int g_max_depth;
 
 void swap(int & x, int & y);
 bool move_is_valid(string move);
 void usage();
+int piece_value(char piece);
 
 class Move;
 class State;
