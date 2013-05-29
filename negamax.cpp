@@ -8,7 +8,7 @@
 #include "state.h"
 #include "move.h"
 
-int negamax(State current_state, int depth, Move & final_best_move, clock_t start_time, int & states_evaluated, int alpha, int beta)
+int negamax(State current_state, int depth, clock_t start_time, int & states_evaluated, int alpha, int beta)
 {
   if (current_state.is_final() || depth <= 0) {
     int eval = current_state.evaluate(current_state.on_move());
@@ -21,6 +21,7 @@ int negamax(State current_state, int depth, Move & final_best_move, clock_t star
   int value = -MAX_SCORE;
   int alpha_0 = alpha;
   Move next_move;
+  Move best_move;
   State potential_state;
   vector<Move> moves = current_state.moves_for_side();
   int size = moves.size();
@@ -31,22 +32,31 @@ int negamax(State current_state, int depth, Move & final_best_move, clock_t star
     #ifdef DEBUG
       for (int i = depth; i < g_max_depth; ++i) { cout << "\t"; }
       if (current_state.on_move() == white) {
-        cout << "<move-white " << next_move << ">";
+        cout << "<" << depth << " " << "move-white " << next_move << ">";
       } else {
-        cout << "<move-black " << next_move << ">";
+        cout << "<" << depth << " " << "move-black " << next_move << ">";
       } 
     #endif
-    if (clock() - start_time < MAX_TIME) {
-      value = max(value, -(negamax(potential_state, depth - 1, final_best_move, start_time, states_evaluated, -beta, -alpha_0)));
+//    if (clock() - start_time < MAX_TIME) {
+      #ifdef DEBUG
+        if (depth != 1) {
+          cout << endl;
+        }
+      #endif
+      value = max(value, -(negamax(potential_state, depth - 1, start_time, states_evaluated, -beta, -alpha_0)));
       alpha_0 = max(alpha_0, value);
       if (value >= beta) {
-        final_best_move = next_move;
+        best_move = next_move;
         return value;
       }
-    } else {
-      final_best_move = next_move;
-      return value;
-    }
+  //  } else {
+      #ifdef DEBUG
+   //     cout << value << " #out of time value" << endl;
+      #endif
+    //  best_move = next_move;
+     // cout << "returning with " << best_move << endl;
+      //return value;
+    //}
   }
   #ifdef DEBUG
     bool move = current_state.on_move();
@@ -61,7 +71,7 @@ int negamax(State current_state, int depth, Move & final_best_move, clock_t star
     for (int i = depth; i < g_max_depth; ++i) { cout << "\t"; }
     if (move == white) { cout << "Best white score: "; }
     else { cout << "Best black score: "; }
-    cout << max;
+    cout << value;
     cout << endl;
     for (int i = depth; i < g_max_depth; ++i) { cout << "\t"; }
     if (move == white) { cout << "Best white move: "; }
@@ -69,6 +79,6 @@ int negamax(State current_state, int depth, Move & final_best_move, clock_t star
     cout << best_move;
     cout << endl << endl;
   #endif
-  final_best_move = next_move;
+  best_move = next_move;
   return value;
 }

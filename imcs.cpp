@@ -12,7 +12,7 @@ Imcs::Imcs(bool verbose)
   char hostname[] = "imcs.svcs.cs.pdx.edu";
   int port = 3589;
   char username[] = "chesster";
-  char password[] = "chessterspassword";
+  char password[] = "cp";
   char color = 'W';
 
   // Connect to server

@@ -12,12 +12,12 @@ using namespace std;
 #ifdef DEBUG
 #undef DEBUG
 #endif
-//#define DEBUG
+#define DEBUG
 
 const bool white = true;
 const bool black = false;
 const int MAX_MOVES = 40;
-const int MAX_DEPTH = 3;
+//const int MAX_DEPTH = 3;
 const int MAX_SEC = 1;
 const int MAX_TIME = MAX_SEC * CLOCKS_PER_SEC;
 const int MAX_SCORE = 9600;
@@ -31,7 +31,7 @@ void usage();
 class Move;
 class State;
 
-int negamax(State current_state, int depth, Move & best_move, clock_t start_time, int & states_evaluated, int alpha, int beta);
+int negamax(State current_state, int depth, clock_t start_time, int & states_evaluated, int alpha, int beta);
 int human_play(State & board, vector<Move> & themoves);
 int bot_play(State & board, vector<Move> & themoves);
 int human_turn(State & board, vector<Move> & themoves);

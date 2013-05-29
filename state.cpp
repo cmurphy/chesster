@@ -410,16 +410,24 @@ Move State::choose_move() throw (int)
     clock_t time_now = start;
     int states_evaluated = 0;
     while (time_now - start < MAX_TIME) {
+      int i;
       value = -MAX_SCORE;
       alpha_0 = value;
-      for (int i = 0; i < size; ++i) {
-        int value_0 = max(value, -negamax(*this, depth, newmove, start, states_evaluated, -MAX_SCORE, -alpha_0));
+      for (i = 0; i < size; ++i) {
+        State potential_state = make_move(themoves[i]);
+        potential_state.update_side_on_move();
+        int value_0 = max(value, -negamax(potential_state, depth, start, states_evaluated, -MAX_SCORE, -alpha_0));
         alpha_0 = max(alpha_0, value_0);
+        cout << "old value: " << value << endl;
+        cout << "value 0: " << value_0 << endl;
         if (value_0 > value) {
+          value = value_0;
           newmove = themoves[i];
         }
-        value = max(value, value_0);
       }
+      cout << "new move: " << newmove << endl;
+      cout << "moves evaluated: " << i << endl;
+      cout << "depth achieved: " << depth << endl;
       ++depth;
       g_max_depth = depth;
       time_now = clock();
