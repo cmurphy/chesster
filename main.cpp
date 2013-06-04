@@ -2,6 +2,7 @@
 #include "imcs.h"
 #include "player.h"
 #include "game.h"
+#include "cstdio"
 
 int main(int argc, char ** argv)
 {
@@ -43,10 +44,23 @@ int main(int argc, char ** argv)
   return 0;
 }
 
-bool move_is_valid(string move)
+bool move_is_valid(const string move)
 {
+  string tmp_move(move, 0, 5);
+  cout << "in move_is_valid: |" << move << "|" << endl;
   cout << move.length() << endl;
-  return move.length() == 5 && move[0] >= 'a' && move[0] <= 'e' && move[1] >= '1' && move[1] <= '6' && move[2] == '-' && move[3] >= 'a' && move[3] <= 'e' && move[4] >= '1' && move[4] <= '6';
+  //return move.length() == 5 && move[0] >= 'a' && move[0] <= 'e' && move[1] >= '1' && move[1] <= '6' && move[2] == '-' && move[3] >= 'a' && move[3] <= 'e' && move[4] >= '1' && move[4] <= '6';
+  cout << "tmp_move[0] >= 'a' " << (tmp_move[0] >= 'a') << endl;
+  cout << "tmp_move[0] <= 'e' " << (tmp_move[0] <= 'e') << endl;
+  cout << "tmp_move[1] >= '1' " << (tmp_move[1] >= '1') << endl;
+  cout << "tmp_move[1] <= '6' " << (tmp_move[1] <= '6') << endl;
+  cout << "tmp_move[2] == '-' " << (tmp_move[2] == '-') << endl;
+  cout << "tmp_move[3] >= 'a' " << (tmp_move[3] >= 'a') << endl;
+  cout << "tmp_move[3] <= 'e' " << (tmp_move[3] <= 'e') << endl;
+  cout << "tmp_move[4] >= '1' " << (tmp_move[4] >= '1') << endl;
+  cout << "tmp_move[4] <= '6' " << (tmp_move[5] <= '6') << endl;
+  return tmp_move[0] >= 'a' && tmp_move[0] <= 'e' && tmp_move[1] >= '1' && tmp_move[1] <= '6' && tmp_move[2] == '-' && tmp_move[3] >= 'a' && tmp_move[3] <= 'e' && tmp_move[4] >= '1' && tmp_move[4] <= '6';
+  
 }
 
 void usage()
@@ -78,5 +92,38 @@ int piece_value(char piece)
       cout << "piece: " << piece;
       perror("Not a valid piece");
       exit(1);
+  }
+}
+
+int piece_index(char piece)
+{
+  switch(piece)
+  {
+    case 'P':
+      return 1;
+    case 'B':
+      return 2;
+    case 'N':
+      return 3;
+    case 'R':
+      return 4;
+    case 'Q':
+      return 5;
+    case 'K':
+      return 6;
+    case 'p':
+      return 7;
+    case 'b':
+      return 8;
+    case 'n':
+      return 9;
+    case 'r':
+      return 10;
+    case 'q':
+      return 11;
+    case 'k':
+      return 12;
+    default:
+      return 0;
   }
 }

@@ -1,6 +1,7 @@
 #include "imcs.h"
 #include "header.h"
 #include "move.h"
+#include <cstdio>
 
 static char buffer[1024];
 
@@ -164,7 +165,9 @@ Move Imcs::get_move()
   char * valid_move = new char[len];
   strncpy(valid_move, stringmove, strlen(stringmove) - 1);
   if (!move_is_valid(valid_move)) {
-    cout << stringmove << endl;
+    //cout << "%" << stringmove << "*"<< endl;
+    //cout << "&" << stringmove << "@"<< endl;
+    printf("*%s*", stringmove);
     perror("received invalid string for move");
     exit(1);
   }

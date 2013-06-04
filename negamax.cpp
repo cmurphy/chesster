@@ -7,6 +7,8 @@
 #include "header.h"
 #include "state.h"
 #include "move.h"
+#include "ttable.h"
+#include "ttable_entry.h"
 
 int negamax(State current_state, int depth, clock_t start_time, int & states_evaluated, int alpha, int beta)
 {
@@ -18,6 +20,11 @@ int negamax(State current_state, int depth, clock_t start_time, int & states_eva
     #endif
     ++states_evaluated;
     return eval;
+  }
+  long int hash = current_state.get_hash();
+  TTableEntry * table_entry = TTable::lookup(hash);
+  if (table_entry != 0 && table_entry->is_within_cutoff(alpha, beta, depth)) {
+    return table_entry->get_value();
   }
   int value = -MAX_SCORE;
   int alpha_0 = alpha;
@@ -84,6 +91,9 @@ int negamax(State current_state, int depth, clock_t start_time, int & states_eva
     cout << best_move;
     cout << endl << endl;
   #endif
+  hash = current_state.get_hash();
+  table_entry = new TTableEntry(hash, depth, alpha, beta, value);
+  TTable::save_entry(*table_entry);
   best_move = next_move;
   return value;
 }

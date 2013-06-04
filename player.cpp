@@ -1,6 +1,8 @@
 #include "player.h"
 #include "state.h"
 #include "move.h"
+#include <cstdio>
+#include <cstdlib>
 
 Player::Player(char color)
 {

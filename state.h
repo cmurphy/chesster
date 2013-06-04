@@ -17,6 +17,7 @@ class State
     char board[BOARD_SIZE_Y][BOARD_SIZE_X];
     bool game_over;
     int state_value;
+    long int hash;
 
   public:
     State(); 
@@ -41,6 +42,8 @@ class State
     int evaluate();
     int evaluate(bool side);
     Move choose_move() throw (int);
+    void compute_hash();
+    long int get_hash();
 };
 
 #endif

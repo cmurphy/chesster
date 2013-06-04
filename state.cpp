@@ -2,6 +2,8 @@
 #include "header.h"
 #include "move.h"
 #include "piece.h"
+#include <cstdio>
+#include "zobrist.h"
 
 State::State()
 {
@@ -179,6 +181,10 @@ char State::make_move(Move newmove)
   int fromx, fromy, tox, toy;
   from.getxy(fromx, fromy);
   to.getxy(tox, toy);
+  long int z_source_before = 
+           ZobristTable::lookup(fromy * BOARD_SIZE_X + fromx, piece_index(board[fromy][fromx]));
+  long int z_dest_before = 
+           ZobristTable::lookup(toy * BOARD_SIZE_X + tox, piece_index(board[toy][tox]));
   char captured;
   try {
     if (move_start_is_valid(board[fromy][fromx], side_on_move)) {
@@ -217,6 +223,16 @@ char State::make_move(Move newmove)
     cout << "Not a valid move" << newmove << endl;
   }
   state_value += piece_value(captured);
+
+  long int z_source_after = 
+           ZobristTable::lookup(fromy * BOARD_SIZE_X + fromx, piece_index(board[fromy][fromx]));
+  long int z_dest_after = 
+           ZobristTable::lookup(toy * BOARD_SIZE_X + tox, piece_index(board[toy][tox]));
+
+  hash ^= z_source_before ^ z_source_after
+        ^ z_dest_before ^ z_dest_after
+        ^ ZobristTable::lookup(side_on_move) ^ ZobristTable::lookup(!side_on_move);
+
   return captured; //could return '.'
 }
 
@@ -227,6 +243,11 @@ void State::unmake_move(Move oldmove, char captured)
   int fromx, fromy, tox, toy;
   from.getxy(fromx, fromy);
   to.getxy(tox, toy);
+
+  long int z_source_before = 
+           ZobristTable::lookup(fromy * BOARD_SIZE_X + fromx, piece_index(board[fromy][fromx]));
+  long int z_dest_before = 
+           ZobristTable::lookup(toy * BOARD_SIZE_X + tox, piece_index(board[toy][tox]));
 
   char piece = board[toy][tox];
   board[fromy][fromx] = piece;
@@ -250,6 +271,15 @@ void State::unmake_move(Move oldmove, char captured)
   if (piece == 'K' && (toy != 0 && fromy == 0)) {
     state_value += 50;
   }
+
+  long int z_source_after = 
+           ZobristTable::lookup(fromy * BOARD_SIZE_X + fromx, piece_index(board[fromy][fromx]));
+  long int z_dest_after = 
+           ZobristTable::lookup(toy * BOARD_SIZE_X + tox, piece_index(board[toy][tox]));
+
+  hash ^= z_source_before ^ z_source_after
+        ^ z_dest_before ^ z_dest_after
+        ^ ZobristTable::lookup(side_on_move) ^ ZobristTable::lookup(!side_on_move);
 }
 
 /*
@@ -517,4 +547,21 @@ bool State::is_final()
     }
   }
   return true;
+}
+
+
+void State::compute_hash()
+{
+  for (int i = 0; i < BOARD_SIZE_Y; ++i) {
+    for (int j = 0; j < BOARD_SIZE_X; ++j) {
+      hash ^= ZobristTable::lookup(i * BOARD_SIZE_X + j, piece_index(board[i][j]));
+    }
+  }
+  hash ^= ZobristTable::lookup(side_on_move);
+}
+
+
+long int State::get_hash()
+{
+  return hash;
 }

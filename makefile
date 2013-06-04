@@ -1,7 +1,7 @@
 all: a.out
 
-a.out: .main.o .square.o .move.o .state.o .negamax.o .utilities.o .imcs.o .player.o .game.o .piece.o header.h
-	g++ .main.o .square.o .move.o .state.o .negamax.o .utilities.o .imcs.o .player.o .game.o .piece.o
+a.out: .main.o .square.o .move.o .state.o .negamax.o .utilities.o .imcs.o .player.o .game.o .piece.o .zobrist.o .ttable.o .ttable_entry.o header.h
+	g++ .main.o .square.o .move.o .state.o .negamax.o .utilities.o .imcs.o .player.o .game.o .piece.o .zobrist.o .ttable.o .ttable_entry.o
 
 .main.o: main.cpp header.h
 	g++ -c -g main.cpp -o .main.o
@@ -32,6 +32,15 @@ a.out: .main.o .square.o .move.o .state.o .negamax.o .utilities.o .imcs.o .playe
 
 .piece.o: piece.cpp piece.h header.h
 	g++ -c -g piece.cpp -o .piece.o
+
+.zobrist.o: zobrist.cpp zobrist.h
+	g++ -c -g zobrist.cpp -o .zobrist.o
+
+.ttable.o: ttable.cpp ttable.h
+	g++ -c -g ttable.cpp -o .ttable.o
+
+.ttable_entry.o: ttable_entry.cpp ttable_entry.h
+	g++ -c -g ttable_entry.cpp -o .ttable_entry.o
 
 clean:
 	rm *.o a.out

@@ -33,9 +33,10 @@ const int KING_VAL = 5000;
 extern int g_max_depth;
 
 void swap(int & x, int & y);
-bool move_is_valid(string move);
+bool move_is_valid(const string move);
 void usage();
 int piece_value(char piece);
+int piece_index(char piece);
 
 class Move;
 class State;

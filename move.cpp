@@ -1,4 +1,5 @@
 #include "move.h"
+#include <cstdio>
 
 Move::Move()
 {
