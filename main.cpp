@@ -44,13 +44,21 @@ int main(int argc, char ** argv)
   return 0;
 }
 
+void usage()
+{
+  cout << "USAGE: ./a.out [-v] [-c <color> ]"
+       << "-v -- verbose"
+       << "-o [color] -- offer, optional with color (W or B)"
+       << "-a <gameid>  [color]-- accept a game with a given game id, optional with color (W or B)";
+}
+
+
 bool move_is_valid(const string move)
 {
   string tmp_move(move, 0, 5);
-  cout << "in move_is_valid: |" << move << "|" << endl;
-  cout << move.length() << endl;
+  //cout << move.length() << endl;
   //return move.length() == 5 && move[0] >= 'a' && move[0] <= 'e' && move[1] >= '1' && move[1] <= '6' && move[2] == '-' && move[3] >= 'a' && move[3] <= 'e' && move[4] >= '1' && move[4] <= '6';
-  cout << "tmp_move[0] >= 'a' " << (tmp_move[0] >= 'a') << endl;
+/*  cout << "tmp_move[0] >= 'a' " << (tmp_move[0] >= 'a') << endl;
   cout << "tmp_move[0] <= 'e' " << (tmp_move[0] <= 'e') << endl;
   cout << "tmp_move[1] >= '1' " << (tmp_move[1] >= '1') << endl;
   cout << "tmp_move[1] <= '6' " << (tmp_move[1] <= '6') << endl;
@@ -58,17 +66,11 @@ bool move_is_valid(const string move)
   cout << "tmp_move[3] >= 'a' " << (tmp_move[3] >= 'a') << endl;
   cout << "tmp_move[3] <= 'e' " << (tmp_move[3] <= 'e') << endl;
   cout << "tmp_move[4] >= '1' " << (tmp_move[4] >= '1') << endl;
-  cout << "tmp_move[4] <= '6' " << (tmp_move[5] <= '6') << endl;
+  cout << "tmp_move[4] <= '6' " << (tmp_move[5] <= '6') << endl; */
   return tmp_move[0] >= 'a' && tmp_move[0] <= 'e' && tmp_move[1] >= '1' && tmp_move[1] <= '6' && tmp_move[2] == '-' && tmp_move[3] >= 'a' && tmp_move[3] <= 'e' && tmp_move[4] >= '1' && tmp_move[4] <= '6';
   
 }
 
-void usage()
-{
-  cout << "USAGE: ./a.out [-v] [-c <color> ]"
-       << "-v -- verbose"
-       << "-o -- offer, optional with color (W or B)";
-}
 
 int piece_value(char piece)
 {

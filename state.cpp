@@ -509,18 +509,22 @@ Move State::choose_move() throw (int)
           newmove = themoves[i];
         }
       }
-      cout << "new move: " << newmove << endl;
-      cout << "moves evaluated: " << i << endl;
-      cout << "depth achieved: " << depth << endl;
       ++depth;
       g_max_depth = depth;
       time_now = clock();
       states_evaluated_total += states_evaluated_at_depth;
-      cout << "time at depth: " << (time_now - start) / CLOCKS_PER_SEC << "seconds and " << ((time_now - start) % CLOCKS_PER_SEC) / (CLOCKS_PER_SEC / 1000) << " milliseconds" << endl;
-      cout << "states evaluated at depth: " << states_evaluated_at_depth << endl;
+      #ifdef DEBUG
+        cout << "new move: " << newmove << endl;
+        cout << "moves evaluated: " << i << endl;
+        cout << "depth achieved: " << depth << endl;
+        cout << "time at depth: " << (time_now - start) / CLOCKS_PER_SEC << "seconds and " << ((time_now - start) % CLOCKS_PER_SEC) / (CLOCKS_PER_SEC / 1000) << " milliseconds" << endl;
+        cout << "states evaluated at depth: " << states_evaluated_at_depth << endl;
+      #endif
     }
-    cout << "time total: " << (time_now - start) / CLOCKS_PER_SEC << "seconds and " << ((time_now - start) % CLOCKS_PER_SEC)  / (CLOCKS_PER_SEC / 1000) << " milliseconds" << endl;
-    cout << "states evaluated total: " << states_evaluated_total << endl;
+    #ifdef DEBUG
+      cout << "time total: " << (time_now - start) / CLOCKS_PER_SEC << "seconds and " << ((time_now - start) % CLOCKS_PER_SEC)  / (CLOCKS_PER_SEC / 1000) << " milliseconds" << endl;
+      cout << "states evaluated total: " << states_evaluated_total << endl;
+    #endif
     Move empty_move;
     if (newmove == empty_move) {
         newmove = themoves[0];

@@ -68,7 +68,9 @@ void Imcs::imcs_connect(char * hostname, int port)
     socket_address.sin_port = htons(port);
     memcpy(&socket_address.sin_addr, *addr, host->h_length);
     if (connect(sock, (struct sockaddr *)&socket_address, sizeof(socket_address)) != -1) {
-      cout << "connected to a socket" << endl;
+      if (verbose) {
+        cout << "connected to a socket" << endl;
+      }
       break;
     }
   }
@@ -103,7 +105,6 @@ void Imcs::offer(char color)
 {
   sprintf(buffer, "offer %c", color);
   send(buffer);
-  cout << "getting offer response" << endl;
   get(); // error checking
   if (color == 'B') {
     get(); // get "game starts"
@@ -116,7 +117,6 @@ void Imcs::accept(int game, char color)
 {
   sprintf(buffer, "accept %d %c", game, color);
   send(buffer);
-  cout << "accepting game" << endl;
 }
 
 
@@ -130,7 +130,6 @@ char Imcs::game_start(char player_color)
       exit(1);
     }
     player_color = color_string[4];
-    cout << "got color " << player_color << endl;
   }
   return player_color;
   //TODO: error checking, make sure these are getting what we expect
@@ -157,22 +156,19 @@ void Imcs::make_move(Move local_move)
 Move Imcs::get_move()
 {
   char * imcs_move = get();
-  cout << "got a move" << imcs_move << "|" << endl;
   (void) strtok(imcs_move, " ");
   char * stringmove = strtok(NULL, "\n");
-  cout << stringmove << endl;
   int len = strlen(stringmove);
   char * valid_move = new char[len];
   strncpy(valid_move, stringmove, strlen(stringmove) - 1);
   if (!move_is_valid(valid_move)) {
-    //cout << "%" << stringmove << "*"<< endl;
-    //cout << "&" << stringmove << "@"<< endl;
     printf("*%s*", stringmove);
     perror("received invalid string for move");
     exit(1);
   }
   Move remote_move = Move(stringmove);
   remote_move.print();
+  cout << endl;
   get();
   get();
   // Flush board state returned by server

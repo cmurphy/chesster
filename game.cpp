@@ -31,8 +31,6 @@ Game::~Game()
 void Game::play()
 {
   char self_color = player->get_color();
-  cout << "self color" << self_color << endl;
-//  cout << "Waiting for game to be accepted" << endl;
   self_color = server->game_start(self_color);
   player->set_color(self_color);
   while (!board->game_is_over()) {
@@ -40,26 +38,27 @@ void Game::play()
       server->get_board();
       Move local_move = player->choose_move(*board);
       board->make_move(local_move);
-      cout << "Sending move to server (white)" << endl;
       server->make_move(local_move);
       if (board->game_is_over()) {
         break;
       }
       board->update_side_on_move();
-      cout << "Waiting for move from server (white)" << endl;
+      board->print();
+      cout << endl << endl;
       Move remote_move = server->get_move(); // TODO: error checking for legality of remote move
-      cout << "Received move " << remote_move << endl;
       board->make_move(remote_move); 
       board->update_side_on_move();
       board->update_move_count();
+      board->print();
+      cout << endl << endl;
     }
     else {
-      cout << "Waiting for move from server (black)" << endl;
       Move remote_move = server->get_move(); 
-      cout << "Received move " << remote_move << endl;
       server->get_board();
       board->make_move(remote_move); 
       board->update_side_on_move();
+      board->print();
+      cout << endl << endl;
       if (board->game_is_over()) {
         break;
       }
@@ -68,6 +67,8 @@ void Game::play()
       server->make_move(local_move);
       board->update_side_on_move();
       board->update_move_count();
+      board->print();
+      cout << endl << endl;
     }
   }
 }
