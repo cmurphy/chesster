@@ -252,7 +252,7 @@ void State::unmake_move(Move oldmove, char captured)
   char piece = board[toy][tox];
   board[fromy][fromx] = piece;
   board[toy][tox] = captured;
-  state_value -= captured;
+  state_value -= piece_value(captured);
   if (piece == 'p' && toy == 0) {
     state_value = state_value - (QUEEN_VAL - PAWN_VAL);
   }
